@@ -1,0 +1,98 @@
+{
+  "title": "Operating Systems",
+  "exam": "ccat",
+  "subject": "operating-systems",
+  "topic": "os-basics",
+  "description": "Operating Systems MCQs on process scheduling, deadlocks, memory management, and paging for C-CAT. Essential revision material for C-CAT aspirants.",
+  "relatedCheatsheet": "operating-systems-cheat-sheet",
+  "questions": [
+    {
+      "question": "What is the formula for Turnaround Time?",
+      "options": [
+        "Burst Time \u2212 Arrival Time",
+        "Completion Time \u2212 Arrival Time",
+        "Completion Time \u2212 Burst Time",
+        "Waiting Time + Arrival Time"
+      ],
+      "correct": 1,
+      "explanation": "Turnaround Time = Completion Time - Arrival Time. It measures total time from arrival to completion."
+    },
+    {
+      "question": "Which CPU scheduling algorithm can cause starvation of long processes?",
+      "options": [
+        "FCFS",
+        "Round Robin",
+        "SJF",
+        "None of these"
+      ],
+      "correct": 2,
+      "explanation": "Correct answer: SJF."
+    },
+    {
+      "question": "What does the PCB (Process Control Block) primarily enable?",
+      "options": [
+        "Faster disk access",
+        "Context switching between processes",
+        "Memory compression",
+        "Network communication"
+      ],
+      "correct": 1,
+      "explanation": "The PCB stores all process information needed for context switching between processes."
+    },
+    {
+      "question": "How many of the 4 Coffman conditions must hold for a deadlock to occur?",
+      "options": [
+        "Any 1",
+        "Any 2",
+        "Any 3",
+        "All 4"
+      ],
+      "correct": 3,
+      "explanation": "All four Coffman conditions (Mutual Exclusion, Hold and Wait, No Preemption, Circular Wait) must hold for deadlock."
+    },
+    {
+      "question": "The Banker's Algorithm is used for which deadlock-handling strategy?",
+      "options": [
+        "Prevention",
+        "Avoidance",
+        "Detection",
+        "Recovery"
+      ],
+      "correct": 1,
+      "explanation": "All four Coffman conditions (Mutual Exclusion, Hold and Wait, No Preemption, Circular Wait) must hold for deadlock."
+    },
+    {
+      "question": "Belady's Anomaly (more frames causing more page faults) occurs with which algorithm?",
+      "options": [
+        "LRU",
+        "Optimal",
+        "FIFO",
+        "None of these"
+      ],
+      "correct": 2,
+      "explanation": "Belady's Anomaly occurs with FIFO page replacement, where more frames can paradoxically cause more page faults."
+    },
+    {
+      "question": "Paging can lead to which type of fragmentation?",
+      "options": [
+        "External",
+        "Internal",
+        "Both equally",
+        "Neither"
+      ],
+      "correct": 1,
+      "explanation": "Paging causes internal fragmentation because the last page may be only partially filled."
+    },
+    {
+      "question": "What primarily causes thrashing?",
+      "options": [
+        "Too few processes running",
+        "Too many processes competing for too little physical memory",
+        "A CPU scheduling bug",
+        "Using SSD instead of HDD"
+      ],
+      "correct": 1,
+      "explanation": "Thrashing occurs when too many processes compete for too little physical memory, causing excessive page faults."
+    }
+  ]
+}

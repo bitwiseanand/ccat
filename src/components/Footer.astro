@@ -1,0 +1,103 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-brand">
+      <span class="logo-icon">📚</span>
+      <span class="logo-text">ExamCheatSheets</span>
+      <p>Free, no-login cheat sheets for CS exams. Built for the final revision stretch.</p>
+    </div>
+    <div class="footer-links">
+      <div>
+        <h4>Exams</h4>
+        <a href="/ccat/">C-CAT</a>
+        <a href="/gate-cse/">GATE CSE</a>
+      </div>
+      <div>
+        <h4>Resources</h4>
+        <a href="/ccat/cheat-sheets/">Cheat Sheets</a>
+        <a href="/ccat/mcqs/">MCQs</a>
+        <a href="/ccat/flashcards/">Flashcards</a>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <a href="/about/">About</a>
+        <a href="/privacy-policy/">Privacy</a>
+        <a href="/terms/">Terms</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© {year} ExamCheatSheets. All rights reserved. Built with ❤️ for exam aspirants.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: #0f172a;
+    color: #94a3b8;
+    margin-top: 4rem;
+  }
+  .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 3rem;
+  }
+  @media (max-width: 768px) {
+    .footer-container { grid-template-columns: 1fr; gap: 2rem; }
+  }
+  .footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .footer-brand .logo-icon { font-size: 1.5rem; }
+  .footer-brand .logo-text {
+    color: white;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+  .footer-brand p {
+    margin: 0;
+    line-height: 1.6;
+    font-size: 0.9rem;
+  }
+  .footer-links {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+  @media (max-width: 768px) {
+    .footer-links { grid-template-columns: repeat(2, 1fr); }
+  }
+  .footer-links h4 {
+    color: white;
+    font-size: 0.875rem;
+    margin: 0 0 0.75rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .footer-links a {
+    display: block;
+    color: #94a3b8;
+    text-decoration: none;
+    padding: 0.25rem 0;
+    font-size: 0.875rem;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover {
+    color: white;
+  }
+  .footer-bottom {
+    border-top: 1px solid #1e293b;
+    padding: 1.5rem;
+    text-align: center;
+    font-size: 0.8rem;
+  }
+  .footer-bottom p { margin: 0; }
+</style>

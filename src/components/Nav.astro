@@ -1,0 +1,269 @@
+---
+import { exams } from '../data/exams';
+
+const currentPath = Astro.url.pathname;
+const currentExam = currentPath.split('/')[1];
+---
+
+<header class="site-header">
+  <nav class="nav-container" aria-label="Main navigation">
+    <a href="/" class="logo">
+      <span class="logo-icon">📚</span>
+      <span class="logo-text">ExamCheatSheets</span>
+    </a>
+
+    <button class="mobile-toggle" aria-expanded="false" aria-controls="mobile-nav-panel" aria-label="Open menu">
+      <svg class="icon-open" width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <svg class="icon-close" width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M5 5l12 12M17 5L5 17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+    </button>
+
+    <div class="nav-links">
+      <a href="/notes/" class={currentPath.startsWith('/notes') ? 'active' : ''}>Notes</a>
+
+      <div class="dropdown">
+        <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true">
+          Exams
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.5"/></svg>
+        </button>
+        <div class="dropdown-menu">
+          {exams.map(exam => (
+            <a
+              href={`/${exam.id}/`}
+              class={currentExam === exam.id ? 'active' : ''}
+              style={`--exam-color: ${exam.color}`}
+            >
+              <span class="exam-dot" style={`background: ${exam.color}`}></span>
+              {exam.name}
+            </a>
+          ))}
+        </div>
+      </div>
+      <a href="/about/" class={currentPath === '/about/' ? 'active' : ''}>About</a>
+    </div>
+  </nav>
+
+  <div class="mobile-nav-panel" id="mobile-nav-panel">
+    <a href="/notes/" class={currentPath.startsWith('/notes') ? 'active' : ''}>Notes</a>
+    <p class="mobile-nav-label">Exams</p>
+    {exams.map(exam => (
+      <a
+        href={`/${exam.id}/`}
+        class={`mobile-exam-link ${currentExam === exam.id ? 'active' : ''}`}
+        style={`--exam-color: ${exam.color}`}
+      >
+        <span class="exam-dot" style={`background: ${exam.color}`}></span>
+        {exam.name}
+      </a>
+    ))}
+    <a href="/about/" class={currentPath === '/about/' ? 'active' : ''}>About</a>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: #0f172a;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+  .logo-icon { font-size: 1.25rem; }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .nav-links a {
+    color: #475569;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 0.5rem 0;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .nav-links a:hover,
+  .nav-links a.active {
+    color: #0ea5e9;
+    border-bottom-color: #0ea5e9;
+  }
+  .dropdown {
+    position: relative;
+  }
+  .dropdown-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: none;
+    border: none;
+    color: #475569;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    font-family: inherit;
+  }
+  .dropdown-toggle svg {
+    transition: transform 0.2s;
+  }
+  .dropdown-menu {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    padding: 0.5rem;
+    min-width: 200px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition: all 0.2s;
+  }
+  /* Hover keeps working for pointer/desktop users as a shortcut... */
+  .dropdown:hover .dropdown-menu,
+  .dropdown:focus-within .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  /* ...but a real click/tap is now the authoritative toggle on every device. */
+  .dropdown.open .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .dropdown.open .dropdown-toggle svg {
+    transform: rotate(180deg);
+  }
+  .dropdown-menu a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 0.75rem;
+    border-radius: 8px;
+    border: none;
+    color: #334155;
+    font-size: 0.9rem;
+  }
+  .dropdown-menu a:hover {
+    background: #f1f5f9;
+    color: var(--exam-color, #0ea5e9);
+  }
+  .exam-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  /* Mobile hamburger + slide-down panel */
+  .mobile-toggle {
+    display: none;
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    color: #0f172a;
+    cursor: pointer;
+  }
+  .mobile-toggle .icon-close { display: none; }
+  .mobile-toggle[aria-expanded="true"] .icon-open { display: none; }
+  .mobile-toggle[aria-expanded="true"] .icon-close { display: block; }
+
+  .mobile-nav-panel {
+    display: none;
+    flex-direction: column;
+    padding: 0.5rem 1.5rem 1rem;
+    border-top: 1px solid #e2e8f0;
+  }
+  .mobile-nav-panel.open {
+    display: flex;
+  }
+  .mobile-nav-panel a {
+    padding: 0.85rem 0.25rem;
+    color: #334155;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .mobile-nav-panel a.active {
+    color: #0ea5e9;
+  }
+  .mobile-nav-label {
+    margin: 0.75rem 0 0.25rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #94a3b8;
+  }
+
+  @media (max-width: 720px) {
+    .nav-links { display: none; }
+    .mobile-toggle { display: block; }
+  }
+</style>
+
+<script>
+  // Exams dropdown: click/tap is now authoritative on every device (hover
+  // still works as a bonus shortcut for pointer users, via CSS above).
+  document.querySelectorAll<HTMLElement>('.dropdown').forEach((dropdown) => {
+    const toggle = dropdown.querySelector<HTMLButtonElement>('.dropdown-toggle');
+    if (!toggle) return;
+
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = dropdown.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(isOpen));
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    document.querySelectorAll<HTMLElement>('.dropdown.open').forEach((dropdown) => {
+      if (!dropdown.contains(e.target as Node)) {
+        dropdown.classList.remove('open');
+        dropdown.querySelector('.dropdown-toggle')?.setAttribute('aria-expanded', 'false');
+      }
+    });
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll<HTMLElement>('.dropdown.open').forEach((dropdown) => {
+        dropdown.classList.remove('open');
+        dropdown.querySelector('.dropdown-toggle')?.setAttribute('aria-expanded', 'false');
+      });
+    }
+  });
+
+  // Mobile hamburger menu
+  const mobileToggle = document.querySelector<HTMLButtonElement>('.mobile-toggle');
+  const mobilePanel = document.getElementById('mobile-nav-panel');
+  if (mobileToggle && mobilePanel) {
+    mobileToggle.addEventListener('click', () => {
+      const isOpen = mobilePanel.classList.toggle('open');
+      mobileToggle.setAttribute('aria-expanded', String(isOpen));
+    });
+  }
+</script>

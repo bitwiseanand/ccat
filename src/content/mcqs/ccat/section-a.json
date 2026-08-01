@@ -1,0 +1,65 @@
+{
+  "title": "Aptitude & Reasoning",
+  "exam": "ccat",
+  "subject": "quant",
+  "topic": "aptitude-mixed",
+  "description": "Mixed aptitude MCQs covering percentages, time & work, ratios, and number series for C-CAT Section A. Essential revision material for C-CAT aspirants.",
+  "relatedCheatsheet": "quant-formula-sheet",
+  "questions": [
+    {
+      "question": "If a train covers 60 km in 45 minutes, what is its speed in km/h?",
+      "options": [
+        "70 km/h",
+        "80 km/h",
+        "90 km/h",
+        "75 km/h"
+      ],
+      "correct": 1,
+      "explanation": "Correct answer: 80 km/h."
+    },
+    {
+      "question": "What is 15% of 240?",
+      "options": [
+        "30",
+        "36",
+        "24",
+        "40"
+      ],
+      "correct": 1,
+      "explanation": "Correct answer: 36."
+    },
+    {
+      "question": "A can finish a job in 10 days, B in 15 days. Working together, how many days will they take?",
+      "options": [
+        "5 days",
+        "6 days",
+        "8 days",
+        "12 days"
+      ],
+      "correct": 1,
+      "explanation": "Correct answer: 6 days."
+    },
+    {
+      "question": "Find the next number in the series: 2, 6, 12, 20, 30, ?",
+      "options": [
+        "36",
+        "40",
+        "42",
+        "44"
+      ],
+      "correct": 2,
+      "explanation": "Correct answer: 42."
+    },
+    {
+      "question": "If the ratio of two numbers is 3:5 and their sum is 64, what is the larger number?",
+      "options": [
+        "24",
+        "36",
+        "40",
+        "30"
+      ],
+      "correct": 2,
+      "explanation": "Correct answer: 40."
+    }
+  ]
+}

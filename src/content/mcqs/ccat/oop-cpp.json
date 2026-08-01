@@ -1,0 +1,142 @@
+{
+  "title": "OOP & C++ MCQs",
+  "exam": "ccat",
+  "subject": "cpp-oop",
+  "topic": "oop-concepts",
+  "description": "Practice MCQs on classes, inheritance, polymorphism, encapsulation, and STL for C-CAT preparation. Essential revision material for aspirants.",
+  "relatedCheatsheet": "oop-cpp-cheat-sheet",
+  "questions": [
+    {
+      "question": "Which OOP concept allows a derived class to provide a specific implementation of a method already defined in its base class?",
+      "options": [
+        "Encapsulation",
+        "Method overriding",
+        "Method overloading",
+        "Abstraction"
+      ],
+      "correct": 1,
+      "explanation": "Method overriding lets a derived class redefine a base class method with the same signature, enabling runtime polymorphism."
+    },
+    {
+      "question": "What is the output of the following code?\nclass Base {\npublic:\n    virtual void show() { cout << \"Base\"; }\n};\nclass Derived : public Base {\npublic:\n    void show() override { cout << \"Derived\"; }\n};\nint main() {\n    Base *b = new Derived();\n    b->show();\n}",
+      "options": [
+        "Base",
+        "Derived",
+        "Compilation error",
+        "Undefined behavior"
+      ],
+      "correct": 1,
+      "explanation": "Since show() is virtual, C++ resolves the call at runtime based on the actual object type (Derived), not the pointer type (Base) — this is dynamic dispatch."
+    },
+    {
+      "question": "Which access specifier allows a class member to be accessed only within the same class and by derived classes, but not from outside?",
+      "options": [
+        "public",
+        "private",
+        "protected",
+        "friend"
+      ],
+      "correct": 2,
+      "explanation": "protected members are accessible within the declaring class and any derived class, but not from outside the class hierarchy."
+    },
+    {
+      "question": "What is a pure virtual function in C++?",
+      "options": [
+        "A function with no return type",
+        "A virtual function with a body but no declaration",
+        "A virtual function declared with '= 0' that has no implementation in the base class",
+        "A static function that cannot be overridden"
+      ],
+      "correct": 2,
+      "explanation": "A pure virtual function is declared as 'virtual void func() = 0;' It has no implementation in the base class and forces derived classes to implement it, making the base class abstract."
+    },
+    {
+      "question": "Which of these best describes constructor overloading?",
+      "options": [
+        "Defining multiple constructors with the same name but different parameter lists",
+        "Calling a constructor from another constructor",
+        "A constructor that overrides a base class constructor",
+        "A constructor marked virtual"
+      ],
+      "correct": 0,
+      "explanation": "Constructor overloading means a class can have multiple constructors, differentiated by their parameter lists, similar to function overloading."
+    },
+    {
+      "question": "What happens if a base class destructor is NOT declared virtual, and a derived object is deleted through a base class pointer?",
+      "options": [
+        "Only the base class destructor runs, causing a potential resource leak in the derived class",
+        "Only the derived class destructor runs",
+        "Both destructors run in the correct order regardless",
+        "A compilation error occurs"
+      ],
+      "correct": 0,
+      "explanation": "Without a virtual destructor, deleting a derived object via a base pointer only calls the base destructor, skipping the derived class's cleanup — a common source of memory/resource leaks."
+    },
+    {
+      "question": "Which C++ feature allows the same operator to behave differently based on the operand types?",
+      "options": [
+        "Operator overloading",
+        "Function overriding",
+        "Templates",
+        "Namespaces"
+      ],
+      "correct": 0,
+      "explanation": "Operator overloading lets you redefine how operators like +, -, or == behave for user-defined types (classes/structs)."
+    },
+    {
+      "question": "In C++, what does the 'friend' keyword allow?",
+      "options": [
+        "A function or class outside the class to access its private and protected members",
+        "A class to inherit from multiple base classes",
+        "A function to be called without an object",
+        "A member function to be overridden"
+      ],
+      "correct": 0,
+      "explanation": "A friend function or friend class is granted access to the private and protected members of the class that declares it as a friend, even though it isn't a member itself."
+    },
+    {
+      "question": "Which type of inheritance can lead to the 'diamond problem' in C++?",
+      "options": [
+        "Single inheritance",
+        "Multilevel inheritance",
+        "Multiple inheritance",
+        "Hierarchical inheritance"
+      ],
+      "correct": 2,
+      "explanation": "The diamond problem occurs in multiple inheritance when a class inherits from two classes that both inherit from a common base, creating ambiguity about which base copy to use — resolved in C++ using virtual inheritance."
+    },
+    {
+      "question": "What is the primary purpose of C++ templates?",
+      "options": [
+        "To enable generic programming with types as parameters",
+        "To enforce strict type checking at runtime",
+        "To replace virtual functions",
+        "To manage memory allocation automatically"
+      ],
+      "correct": 0,
+      "explanation": "Templates let you write functions and classes that work with any data type, with the actual type substituted at compile time — the foundation of generic programming in C++ (e.g. the STL)."
+    },
+    {
+      "question": "Which STL container stores elements in contiguous memory and provides fast random access via index?",
+      "options": [
+        "std::list",
+        "std::vector",
+        "std::map",
+        "std::set"
+      ],
+      "correct": 1,
+      "explanation": "std::vector stores elements contiguously like a dynamic array, giving O(1) random access, unlike std::list (doubly linked list) which only allows sequential access."
+    },
+    {
+      "question": "What does encapsulation in OOP primarily achieve?",
+      "options": [
+        "Combining data and the methods that operate on it into a single unit, while restricting direct access to internal state",
+        "Allowing a class to have multiple forms",
+        "Reducing the number of classes needed",
+        "Automatically freeing unused memory"
+      ],
+      "correct": 0,
+      "explanation": "Encapsulation bundles data (attributes) and behavior (methods) together within a class, and uses access specifiers to hide internal implementation details from outside code."
+    }
+  ]
+}

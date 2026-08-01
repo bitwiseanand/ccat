@@ -1,0 +1,138 @@
+---
+import { getCollection } from 'astro:content';
+import NotesLayout from '../../layouts/NotesLayout.astro';
+import { getExamConfig } from '../../data/exams';
+
+export async function getStaticPaths() {
+  const notes = await getCollection('notes');
+  return notes.map((note) => {
+    const id = note.id.replace(/\.mdx?$/, '');
+    const slug = id.endsWith('/overview') ? id.replace(/\/overview$/, '') : id;
+    const subject = id.split('/')[0];
+    return {
+      params: { slug },
+      props: { entry: note, subject, isOverview: id.endsWith('/overview') },
+    };
+  });
+}
+
+const { entry, subject, isOverview } = Astro.props;
+
+let sections: any[] = [];
+if (isOverview) {
+  const allNotes = await getCollection('notes');
+  sections = allNotes
+    .filter((n) => {
+      const nid = n.id.replace(/\.mdx?$/, '');
+      return nid.startsWith(`${subject}/`) && !nid.endsWith('/overview');
+    })
+    .map((n) => ({
+      title: n.data.title,
+      description: n.data.description,
+      slug: n.id.replace(/\.mdx?$/, '').replace(`${subject}/`, ''),
+      order: n.data.order || 999,
+    }))
+    .sort((a, b) => a.order - b.order);
+}
+
+// Resolve the optional cross-link to a fast-revision cheat sheet, if this
+// note declares one (relatedCheatsheet stored as "exam/slug").
+let relatedCheatsheet: { title: string; href: string } | null = null;
+if (entry.data.relatedCheatsheet) {
+  const sheets = await getCollection('cheatsheets');
+  const match = sheets.find((s) => s.id.replace(/\.md$/, '') === entry.data.relatedCheatsheet);
+  if (match) {
+    const [sheetExam, ...rest] = match.id.replace(/\.md$/, '').split('/');
+    relatedCheatsheet = {
+      title: match.data.title,
+      href: `/${sheetExam}/cheat-sheets/${rest.join('/')}/`,
+    };
+  }
+}
+
+const subjectLabel = subject.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase());
+
+const examBadges = (entry.data.usedInExams ?? [])
+  .map((examId: string) => getExamConfig(examId)?.name)
+  .filter(Boolean);
+
+const breadcrumbs = isOverview
+  ? [
+      { label: 'Notes', href: '/notes/' },
+      { label: entry.data.title, href: `/notes/${subject}` },
+    ]
+  : [
+      { label: 'Notes', href: '/notes/' },
+      { label: subjectLabel, href: `/notes/${subject}` },
+      { label: entry.data.title, href: `/notes/${Astro.params.slug}` },
+    ];
+
+const { Content, headings } = await entry.render();
+---
+
+<NotesLayout
+  title={entry.data.title}
+  description={entry.data.description}
+  breadcrumbs={breadcrumbs}
+  noIndex={isOverview && sections.length === 0}
+  headings={headings}
+>
+  <div class="section-label">
+    {isOverview ? 'Subject Overview' : 'Section'}
+  </div>
+  <h1>{entry.data.title}</h1>
+  <p style="color: var(--color-text-muted); margin-bottom: 0.75rem;">{entry.data.description}</p>
+  {examBadges.length > 0 && (
+    <div class="exam-badges">
+      {examBadges.map((name) => <span class="exam-badge">{name}</span>)}
+    </div>
+  )}
+  <div style="margin-bottom: 1.25rem;"></div>
+
+  <Content />
+
+  {relatedCheatsheet && (
+    <a href={relatedCheatsheet.href} class="cross-link-callout">
+      ⚡ Need a fast revision version? See the <strong>{relatedCheatsheet.title}</strong> →
+    </a>
+  )}
+
+  {isOverview && sections.length > 0 && (
+    <>
+      <h2 style="margin-top: 3rem;">Sections</h2>
+      <div class="section-grid">
+        {sections.map((section) => (
+          <a href={`/notes/${subject}/${section.slug}`} class="section-card">
+            <h3>{section.title}</h3>
+            <p>{section.description}</p>
+          </a>
+        ))}
+      </div>
+    </>
+  )}
+
+  {!isOverview && (
+    <a href={`/notes/${subject}`} class="back-link">← Back to {subjectLabel}</a>
+  )}
+</NotesLayout>
+
+<style>
+  .cross-link-callout {
+    display: block;
+    margin: 2rem 0;
+    padding: 1rem 1.25rem;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 10px;
+    color: #1e3a8a;
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+  .cross-link-callout:hover {
+    border-color: #93c5fd;
+    background: #dbeafe;
+  }
+  .cross-link-callout strong {
+    color: #1e40af;
+  }
+</style>

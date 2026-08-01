@@ -1,0 +1,68 @@
+{
+  "$ref": "#/definitions/notes",
+  "definitions": {
+    "notes": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "topic": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "keywords": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "lastUpdated": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "string",
+              "format": "date"
+            },
+            {
+              "type": "integer",
+              "format": "unix-time"
+            }
+          ]
+        },
+        "usedInExams": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "ccat",
+              "gate-cse"
+            ]
+          }
+        },
+        "order": {
+          "type": "number"
+        },
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "subject",
+        "topic",
+        "description"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

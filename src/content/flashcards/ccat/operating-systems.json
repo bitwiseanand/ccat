@@ -1,0 +1,66 @@
+{
+  "title": "Operating Systems",
+  "exam": "ccat",
+  "subject": "operating-systems",
+  "topic": "os-basics",
+  "description": "Flip-card revision for operating systems \u2014 process scheduling, deadlocks, memory management, and paging for fast C-CAT recall.",
+  "relatedCheatsheet": "operating-systems-cheat-sheet",
+  "cards": [
+    {
+      "front": "What does a Process Control Block (PCB) store?",
+      "back": "Process ID, state, program counter, CPU registers, scheduling info \u2014 everything needed for a context switch"
+    },
+    {
+      "front": "Turnaround Time formula",
+      "back": "Completion Time \u2212 Arrival Time"
+    },
+    {
+      "front": "Waiting Time formula",
+      "back": "Turnaround Time \u2212 Burst Time"
+    },
+    {
+      "front": "Which scheduling algorithm risks starving long processes?",
+      "back": "SJF (Shortest Job First) \u2014 short jobs keep jumping the queue ahead of it"
+    },
+    {
+      "front": "The 4 Coffman conditions for deadlock",
+      "back": "Mutual Exclusion, Hold and Wait, No Preemption, Circular Wait \u2014 ALL 4 must hold simultaneously"
+    },
+    {
+      "front": "What does the Banker's Algorithm do?",
+      "back": "Deadlock avoidance \u2014 checks whether granting a resource request keeps the system in a 'safe state'"
+    },
+    {
+      "front": "Key difference between mutex and semaphore",
+      "back": "A mutex has ownership (only the locking thread can unlock it); a semaphore is a general counter any thread can signal"
+    },
+    {
+      "front": "What is Belady's Anomaly?",
+      "back": "With FIFO page replacement specifically, adding more frames can sometimes cause MORE page faults, not fewer"
+    },
+    {
+      "front": "Paging causes which type of fragmentation?",
+      "back": "Internal fragmentation (the last page may be only partially filled)"
+    },
+    {
+      "front": "Segmentation causes which type of fragmentation?",
+      "back": "External fragmentation"
+    },
+    {
+      "front": "What causes thrashing?",
+      "back": "Too many processes competing for too little physical memory \u2014 the degree of multiprogramming is too high"
+    },
+    {
+      "front": "What's the fix for thrashing?",
+      "back": "Reduce the degree of multiprogramming"
+    },
+    {
+      "front": "SCAN disk scheduling is also known as?",
+      "back": "The Elevator Algorithm \u2014 the head moves in one direction, reverses at the end"
+    },
+    {
+      "front": "What does the TLB (Translation Lookaside Buffer) cache?",
+      "back": "Recent page-table lookups, avoiding a full memory access for every address translation"
+    }
+  ]
+}

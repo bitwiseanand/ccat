@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Contact ExamCheatSheets"
+  description="Get in touch with ExamCheatSheets. Report errors, suggest content, or ask questions."
+  type="website"
+>
+  <div class="contact-page">
+    <h1>Contact Us</h1>
+    <p class="lead">
+      Found an error in a cheat sheet? Have a topic suggestion? Want to contribute content? 
+      We'd love to hear from you.
+    </p>
+
+    <div class="contact-methods">
+      <div class="contact-card">
+        <h3>🐛 Report an Issue</h3>
+        <p>Found a mistake? Open an issue on our <a href="https://github.com/bitwiseanand/ccat/issues">GitHub repository</a>.</p>
+      </div>
+      <div class="contact-card">
+        <h3>✏️ Contribute Content</h3>
+        <p>Want to add a cheat sheet or MCQs? Check out our <a href="https://github.com/bitwiseanand/ccat">GitHub repo</a> and submit a PR.</p>
+      </div>
+      <div class="contact-card">
+        <h3>💬 General Feedback</h3>
+        <p>Have a suggestion or question? Reach out via GitHub Discussions.</p>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .contact-page { max-width: 720px; margin: 0 auto; }
+  .contact-page h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+  .lead { font-size: 1.1rem; color: #475569; margin-bottom: 2rem; }
+  .contact-methods { display: grid; gap: 1.5rem; }
+  .contact-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+  .contact-card h3 { margin: 0 0 0.5rem; font-size: 1.1rem; }
+  .contact-card p { margin: 0; color: #475569; }
+</style>

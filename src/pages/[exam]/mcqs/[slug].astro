@@ -1,0 +1,198 @@
+---
+import { getCollection } from 'astro:content';
+import ExamLayout from '../../../layouts/ExamLayout.astro';
+import { getExamConfig } from '../../../data/exams';
+
+export async function getStaticPaths() {
+  const mcqs = await getCollection('mcqs');
+  return mcqs.map(mcq => {
+    const parts = mcq.id.split('/');
+    const exam = parts[0];
+    const slug = parts.slice(1).join('/');
+    return {
+      params: { exam, slug },
+      props: { mcq },
+    };
+  });
+}
+
+const { mcq } = Astro.props;
+const examConfig = getExamConfig(mcq.data.exam);
+const examName = examConfig?.name || mcq.data.exam.toUpperCase();
+
+const breadcrumbs = [
+  { label: examName, href: `/${mcq.data.exam}/` },
+  { label: 'MCQs', href: `/${mcq.data.exam}/mcqs/` },
+  { label: mcq.data.title, href: '#' },
+];
+---
+
+<ExamLayout
+  title={mcq.data.title}
+  description={mcq.data.description}
+  exam={mcq.data.exam}
+  type="quiz"
+  breadcrumbs={breadcrumbs}
+>
+  <div class="mcq-deck" data-mcq-data={JSON.stringify(mcq.data.questions)}>
+    <header class="mcq-header">
+      <h1>{mcq.data.title}</h1>
+      <p class="mcq-description">{mcq.data.description}</p>
+      <div class="mcq-progress">
+        <span class="progress-text">Question <span id="current-q">1</span> of {mcq.data.questions.length}</span>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+      </div>
+    </header>
+
+    <div class="questions-container" id="questions-container">
+      {mcq.data.questions.map((q, idx) => (
+        <div class="question-card" data-index={idx} style={idx === 0 ? '' : 'display:none'}>
+          <div class="question-number">Q{idx + 1}</div>
+          <p class="question-text">{q.question}</p>
+          <div class="options">
+            {q.options.map((opt, optIdx) => (
+              <button class="option-btn" data-index={optIdx} data-correct={optIdx === q.correct}>
+                <span class="option-label">{String.fromCharCode(65 + optIdx)}</span>
+                <span class="option-text">{opt}</span>
+              </button>
+            ))}
+          </div>
+          <div class="explanation" style="display:none">
+            <div class="explanation-header">
+              <span class="result-icon"></span>
+              <span class="result-text"></span>
+            </div>
+            <p>{q.explanation}</p>
+          </div>
+          <div class="question-nav">
+            {idx > 0 && <button class="nav-btn prev-btn" data-target={idx - 1}>← Previous</button>}
+            {idx < mcq.data.questions.length - 1 && (
+              <button class="nav-btn next-btn" data-target={idx + 1}>Next →</button>
+            )}
+            {idx === mcq.data.questions.length - 1 && (
+              <button class="nav-btn finish-btn" style="display:none">Finish</button>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="mcq-summary" id="mcq-summary" style="display:none">
+      <h2>Quiz Complete!</h2>
+      <div class="score-display">
+        <span class="score-number" id="score-number">0</span>
+        <span class="score-total">/ {mcq.data.questions.length}</span>
+      </div>
+      <p id="score-message"></p>
+      <button class="restart-btn" onclick="location.reload()">Try Again</button>
+    </div>
+  </div>
+
+  {mcq.data.relatedCheatsheet && (
+    <div class="related-cheatsheet">
+      <p>📖 Study first: <a href={`/${mcq.data.exam}/cheat-sheets/${mcq.data.relatedCheatsheet}/`}>View Cheat Sheet</a></p>
+    </div>
+  )}
+</ExamLayout>
+
+<script src="/js/mcq.js" is:inline></script>
+
+<style>
+  .mcq-deck { max-width: 720px; margin: 0 auto; }
+  .mcq-header { margin-bottom: 2rem; }
+  .mcq-header h1 { margin: 0 0 0.5rem; }
+  .mcq-description { color: #64748b; margin: 0 0 1rem; }
+  .mcq-progress { display: flex; align-items: center; gap: 1rem; }
+  .progress-text { font-size: 0.875rem; color: #64748b; white-space: nowrap; }
+  .progress-bar { flex: 1; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--exam-color); border-radius: 3px; transition: width 0.3s; width: 0%; }
+  .question-card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 1.5rem; }
+  .question-number {
+    display: inline-block;
+    background: var(--exam-color);
+    color: white;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .question-text { font-size: 1.1rem; font-weight: 500; margin: 0 0 1.25rem; line-height: 1.5; }
+  .options { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.5rem; }
+  .option-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+    font-size: 0.95rem;
+    transition: all 0.15s;
+  }
+  .option-btn:hover { border-color: var(--exam-color); background: #f0f9ff; }
+  .option-btn.correct { border-color: #22c55e; background: #f0fdf4; }
+  .option-btn.wrong { border-color: #ef4444; background: #fef2f2; }
+  .option-btn:disabled { cursor: default; opacity: 0.7; }
+  .option-label {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border: 1px solid #cbd5e1;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .option-btn.correct .option-label { background: #22c55e; color: white; border-color: #22c55e; }
+  .option-btn.wrong .option-label { background: #ef4444; color: white; border-color: #ef4444; }
+  .explanation {
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border-left: 3px solid var(--exam-color);
+  }
+  .explanation-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; font-weight: 600; }
+  .explanation p { margin: 0; color: #475569; font-size: 0.9rem; }
+  .question-nav { display: flex; gap: 0.75rem; }
+  .nav-btn {
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    border: none;
+    background: var(--exam-color);
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+  .nav-btn:hover { opacity: 0.9; }
+  .mcq-summary { text-align: center; padding: 3rem; background: white; border-radius: 16px; border: 1px solid #e2e8f0; }
+  .mcq-summary h2 { margin-bottom: 1rem; }
+  .score-display { margin: 1.5rem 0; }
+  .score-number { font-size: 3rem; font-weight: 800; color: var(--exam-color); }
+  .score-total { font-size: 1.5rem; color: #64748b; }
+  .restart-btn {
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    border: none;
+    background: var(--exam-color);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  .related-cheatsheet {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: #f0f9ff;
+    border-radius: 8px;
+    text-align: center;
+  }
+  .related-cheatsheet a { font-weight: 600; }
+</style>

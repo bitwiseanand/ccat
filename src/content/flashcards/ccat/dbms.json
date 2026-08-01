@@ -1,0 +1,66 @@
+{
+  "title": "DBMS Flashcards",
+  "exam": "ccat",
+  "subject": "dbms",
+  "topic": "dbms-basics",
+  "description": "Flip-card revision for DBMS \u2014 normalization, keys, transactions, indexing, and SQL fundamentals for C-CAT exam preparation and quick recall.",
+  "relatedCheatsheet": "dbms-cheat-sheet",
+  "cards": [
+    {
+      "front": "Can a Primary Key be NULL?",
+      "back": "No, never \u2014 uniqueness and non-NULL are its two defining constraints"
+    },
+    {
+      "front": "Difference between Super Key and Candidate Key",
+      "back": "Every candidate key is a super key, but a candidate key is minimal \u2014 no redundant attributes"
+    },
+    {
+      "front": "What does 1NF require?",
+      "back": "Atomic values only, no repeating groups"
+    },
+    {
+      "front": "What does 2NF eliminate?",
+      "back": "Partial dependency \u2014 a non-key attribute depending on only part of a composite key"
+    },
+    {
+      "front": "What does 3NF eliminate?",
+      "back": "Transitive dependency \u2014 a non-key attribute depending on another non-key attribute"
+    },
+    {
+      "front": "GRANT and REVOKE belong to which SQL category?",
+      "back": "DCL (Data Control Language)"
+    },
+    {
+      "front": "Which SQL category includes INSERT, UPDATE, DELETE?",
+      "back": "DML (Data Manipulation Language)"
+    },
+    {
+      "front": "Atomicity vs Durability \u2014 what's the difference?",
+      "back": "Atomicity = all-or-nothing DURING execution. Durability = stays saved AFTER commit, survives crashes"
+    },
+    {
+      "front": "How many clustered indexes can a table have?",
+      "back": "Only 1 \u2014 it determines the physical storage order of the table's rows"
+    },
+    {
+      "front": "In Two-Phase Locking, what happens right after the first lock release?",
+      "back": "The transaction enters the shrinking phase and cannot acquire any new locks"
+    },
+    {
+      "front": "What does a LEFT JOIN return?",
+      "back": "All rows from the left table, with NULLs for right-table columns where there's no match"
+    },
+    {
+      "front": "B+ Tree vs B-Tree \u2014 which do most real databases actually use for indexing?",
+      "back": "B+ Tree \u2014 all data lives at the leaf level, and leaves are linked for efficient range scans"
+    },
+    {
+      "front": "What is a derived attribute?",
+      "back": "One computed from another attribute \u2014 e.g. Age from Date of Birth \u2014 not stored directly"
+    },
+    {
+      "front": "What does a Foreign Key do?",
+      "back": "References a Primary Key in another table, enforcing referential integrity between them"
+    }
+  ]
+}

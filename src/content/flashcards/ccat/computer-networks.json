@@ -1,0 +1,66 @@
+{
+  "title": "Computer Networks",
+  "exam": "ccat",
+  "subject": "computer-networks",
+  "topic": "networking-basics",
+  "description": "Flip-card revision for computer networks \u2014 OSI model, TCP/IP, routing, switching, and protocols for fast C-CAT recall before the exam.",
+  "relatedCheatsheet": "computer-networks-cheat-sheet",
+  "cards": [
+    {
+      "front": "How many layers does the OSI model have?",
+      "back": "7 \u2014 Physical, Data Link, Network, Transport, Session, Presentation, Application"
+    },
+    {
+      "front": "How many layers does the TCP/IP model have?",
+      "back": "4 \u2014 Network Access, Internet, Transport, Application"
+    },
+    {
+      "front": "TCP vs UDP \u2014 which is connection-oriented and reliable?",
+      "back": "TCP. UDP is connectionless and unreliable, but faster \u2014 used for streaming/gaming"
+    },
+    {
+      "front": "TCP three-way handshake steps",
+      "back": "SYN \u2192 SYN-ACK \u2192 ACK"
+    },
+    {
+      "front": "Default port for HTTP",
+      "back": "80"
+    },
+    {
+      "front": "Default port for HTTPS",
+      "back": "443"
+    },
+    {
+      "front": "Usable host addresses in a /24 subnet",
+      "back": "254 \u2014 256 total minus one for the network address and one for the broadcast address"
+    },
+    {
+      "front": "Which device forwards data based on MAC address?",
+      "back": "A switch (Data Link layer / Layer 2)"
+    },
+    {
+      "front": "Which device forwards data based on IP address?",
+      "back": "A router (Network layer / Layer 3)"
+    },
+    {
+      "front": "RIP uses which routing approach?",
+      "back": "Distance Vector \u2014 routers share their routing tables, decisions based on hop count"
+    },
+    {
+      "front": "OSPF uses which routing approach?",
+      "back": "Link State \u2014 each router builds a full map of the network topology"
+    },
+    {
+      "front": "Which error detection method best catches burst errors?",
+      "back": "CRC (Cyclic Redundancy Check)"
+    },
+    {
+      "front": "What switching technique does the modern internet use?",
+      "back": "Packet switching \u2014 data split into packets, routed independently"
+    },
+    {
+      "front": "What does DNS do?",
+      "back": "Translates human-readable domain names into IP addresses"
+    }
+  ]
+}

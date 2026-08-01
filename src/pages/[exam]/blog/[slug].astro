@@ -1,0 +1,55 @@
+---
+import { getCollection } from 'astro:content';
+import BlogLayout from '../../../layouts/BlogLayout.astro';
+import { getRelatedContent } from '../../../utils/content';
+import { getExamConfig } from '../../../data/exams';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map(post => {
+    const parts = post.id.replace(/\.md$/, '').split('/');
+    const exam = parts[0];
+    const slug = parts.slice(1).join('/');
+    return {
+      params: { exam, slug },
+      props: { post },
+    };
+  });
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+
+const examConfig = getExamConfig(post.data.exam);
+const examName = examConfig?.name || post.data.exam.toUpperCase();
+
+const related = await getRelatedContent({
+  exam: post.data.exam,
+  subject: post.data.category,
+  topic: post.data.category,
+  slug: post.id.replace(/\.md$/, ''),
+  collection: 'blog',
+}, 3);
+
+const breadcrumbs = [
+  { label: examName, href: `/${post.data.exam}/` },
+  { label: 'Blog', href: `/${post.data.exam}/blog/` },
+  { label: post.data.title, href: '#' },
+];
+---
+
+<BlogLayout
+  title={post.data.title}
+  description={post.data.description}
+  exam={post.data.exam}
+  category={post.data.category}
+  date={post.data.date}
+  updatedDate={post.data.updatedDate}
+  readTime={post.data.readTime}
+  keywords={post.data.keywords}
+  breadcrumbs={breadcrumbs}
+  relatedItems={related}
+  faq={post.data.faq}
+>
+  <Content />
+</BlogLayout>

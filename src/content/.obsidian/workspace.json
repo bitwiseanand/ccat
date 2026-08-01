@@ -1,0 +1,205 @@
+{
+  "main": {
+    "id": "8dc61988ae0d429a",
+    "type": "split",
+    "children": [
+      {
+        "id": "6cba3bbab332a4d1",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d4b5f2863c0b73e5",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "cheatsheets/ccat/c-programming-cheat-sheet.md",
+                "mode": "preview",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "c-programming-cheat-sheet"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "8e9838c0a124cf24",
+    "type": "split",
+    "children": [
+      {
+        "id": "8ade9f1669237831",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "2fee91f6738fb693",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "e7d0a53f80a8d00c",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "4e927f44926bf136",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "30e4bffbff7a4d83",
+    "type": "split",
+    "children": [
+      {
+        "id": "fbff50676238968b",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "1560faa489c08cd2",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "notes/Big-Data/overview.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for overview"
+            }
+          },
+          {
+            "id": "ad5d39c4ab0b5ec6",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "notes/Big-Data/overview.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from overview"
+            }
+          },
+          {
+            "id": "f71ced74a15eb4c1",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "9a075c881d5a668a",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "210f4bb1e503260f",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "notes/Big-Data/overview.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of overview"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "d4b5f2863c0b73e5",
+  "lastOpenFiles": [
+    "cheatsheets/ccat/computer-networks-cheat-sheet.md",
+    "cheatsheets/ccat/c-programming-cheat-sheet.md",
+    "cheatsheets/gate-cse/engineering-mathematics.md",
+    "notes/c-programming/Untitled.md",
+    "notes/AI-and-ML/overview.md",
+    "notes/AI-and-ML/ai-history-timeline.md",
+    "cheatsheets/ccat/quant-formula-sheet.md",
+    "cheatsheets/ccat/operating-systems-cheat-sheet.md",
+    "cheatsheets/ccat/oop-cpp-cheat-sheet.md",
+    "cheatsheets/ccat/dbms-cheat-sheet.md",
+    "cheatsheets/ccat/data-structures-cheat-sheet.md",
+    "cheatsheets/ccat/structures-in-c.md",
+    "notes/Big-Data/overview.md",
+    "blog/ccat/10-day-ccat-ml-ai-bigdata-study-plan.md"
+  ]
+}

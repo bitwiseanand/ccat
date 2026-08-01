@@ -1,0 +1,101 @@
+---
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+interface Props {
+  faq: FAQItem[];
+}
+
+const { faq } = Astro.props;
+
+if (!faq || faq.length === 0) return;
+---
+
+<section class="faq-section" aria-label="Frequently asked questions">
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-list">
+    {faq.map((item, index) => (
+      <details class="faq-item" name="faq">
+        <summary>
+          <span class="faq-number">{index + 1}</span>
+          <span class="faq-question">{item.question}</span>
+        </summary>
+        <div class="faq-answer">
+          <p>{item.answer}</p>
+        </div>
+      </details>
+    ))}
+  </div>
+</section>
+
+<style>
+  .faq-section {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+  }
+  .faq-section h2 {
+    margin: 0 0 1.5rem 0;
+    font-size: 1.25rem;
+    color: #1e293b;
+  }
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .faq-item {
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+  }
+  .faq-item summary {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    cursor: pointer;
+    font-weight: 500;
+    color: #0f172a;
+    list-style: none;
+  }
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq-item summary::after {
+    content: '+';
+    margin-left: auto;
+    font-size: 1.25rem;
+    color: #64748b;
+    transition: transform 0.2s;
+  }
+  .faq-item[open] summary::after {
+    content: '−';
+  }
+  .faq-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    background: #0ea5e9;
+    color: white;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .faq-answer {
+    padding: 0 1rem 1rem 3.25rem;
+    color: #475569;
+    line-height: 1.6;
+  }
+  .faq-answer p {
+    margin: 0;
+  }
+</style>

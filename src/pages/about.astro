@@ -1,0 +1,59 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="About ExamCheatSheets"
+  description="Learn about ExamCheatSheets — free, no-login cheat sheets and MCQs for CS exams like C-CAT and GATE CSE."
+  type="website"
+>
+  <div class="about-page">
+    <h1>About ExamCheatSheets</h1>
+    <p class="lead">
+      ExamCheatSheets is a free, open-source resource for students preparing for technical exams 
+      in computer science. No login, no paywall, no ads.
+    </p>
+
+    <h2>What we do</h2>
+    <p>
+      We create scannable, accuracy-checked cheat sheets designed for the final revision stretch 
+      before your exam — not for starting from zero. Every cheat sheet is paired with practice 
+      MCQs and flashcards so you can test your recall immediately.
+    </p>
+
+    <h2>Exams we cover</h2>
+    <ul>
+      <li><strong>C-CAT</strong> — CDAC Common Admission Test (C Programming, Data Structures, OS, Networks, DBMS, C++, Quant, AI/ML, Big Data)</li>
+      <li><strong>GATE CSE</strong> — Graduate Aptitude Test in Engineering, Computer Science stream (13 subjects from Engineering Mathematics to Web Technologies)</li>
+    </ul>
+
+    <h2>Open Source</h2>
+    <p>
+      This site is built with <a href="https://astro.build">Astro</a> and hosted on Vercel. 
+      The source code is available on <a href="https://github.com/bitwiseanand/ccat">GitHub</a>. 
+      Contributions, corrections, and new content are welcome.
+    </p>
+
+    <h2>Contact</h2>
+    <p>
+      Found an error? Have a suggestion? <a href="/contact/">Get in touch</a> or open an issue on GitHub.
+    </p>
+  </div>
+</BaseLayout>
+
+<style>
+  .about-page { max-width: 720px; margin: 0 auto; }
+  .about-page h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+  .lead {
+    font-size: 1.15rem;
+    color: #475569;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+  .about-page h2 {
+    margin-top: 2.5rem;
+    font-size: 1.4rem;
+  }
+  .about-page ul { padding-left: 1.5rem; }
+  .about-page li { margin: 0.5rem 0; }
+</style>

@@ -1,0 +1,119 @@
+---
+import { getCollection } from 'astro:content';
+import NotesLayout from '../../layouts/NotesLayout.astro';
+import { exams, getExamConfig } from '../../data/exams';
+
+const notes = await getCollection('notes');
+
+const subjectsMap = new Map();
+notes.forEach((note) => {
+  const id = note.id.replace(/\.mdx?$/, '');
+  const parts = id.split('/');
+  const subject = parts[0];
+  const isOverview = parts[1] === 'overview';
+
+  if (!subjectsMap.has(subject)) {
+    subjectsMap.set(subject, { overview: null, sections: [] });
+  }
+
+  const subjectData = subjectsMap.get(subject);
+  if (isOverview) {
+    subjectData.overview = note;
+  } else {
+    subjectData.sections.push({
+      title: note.data.title,
+      slug: parts[1],
+      order: note.data.order || 999,
+    });
+  }
+});
+
+subjectsMap.forEach((data) => {
+  data.sections.sort((a: any, b: any) => a.order - b.order);
+});
+
+const subjects = Array.from(subjectsMap.entries())
+  .map(([slug, data]) => ({
+    slug,
+    title: data.overview?.data.title || slug.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()),
+    description: data.overview?.data.description || '',
+    sectionCount: data.sections.length,
+    examIds: (data.overview?.data.usedInExams ?? []) as string[],
+    examBadges: (data.overview?.data.usedInExams ?? [])
+      .map((examId: string) => getExamConfig(examId)?.name)
+      .filter(Boolean),
+  }))
+  // Don't advertise a subject that's just a bare overview stub with no
+  // real sections underneath it yet — same discipline as not launching
+  // an exam section with a single lonely placeholder page.
+  .filter((s) => s.sectionCount > 0);
+
+// Only offer a filter button for an exam if at least one subject is
+// actually tagged with it -- no point offering a toggle that always
+// empties the grid.
+const examFilters = exams.filter((exam) => subjects.some((s) => s.examIds.includes(exam.id)));
+---
+
+<NotesLayout
+  title="Study Notes"
+  description="Topic-wise study notes for C-CAT, GATE CSE, and other exams."
+  breadcrumbs={[{ label: 'Notes', href: '/notes/' }]}
+>
+  <h1>Study Notes</h1>
+  <p style="color: var(--color-text-muted); margin-bottom: 1.25rem;">Topic-wise notes organized by subject. Click any subject to explore its sections.</p>
+
+  {examFilters.length > 1 && (
+    <div class="notes-filter" role="group" aria-label="Filter notes by exam">
+      <button type="button" class="filter-pill active" data-filter="all">All</button>
+      {examFilters.map((exam) => (
+        <button type="button" class="filter-pill" data-filter={exam.id}>{exam.name}</button>
+      ))}
+    </div>
+  )}
+
+  <div class="section-grid" id="notes-grid">
+    {subjects.map((subject) => (
+      <a href={`/notes/${subject.slug}`} class="section-card" data-exams={subject.examIds.join(',')}>
+        <h3>{subject.title}</h3>
+        <p>{subject.description}</p>
+        {subject.examBadges.length > 0 && (
+          <div class="exam-badges" style="margin-top: 0.6rem;">
+            {subject.examBadges.map((name: string) => <span class="exam-badge">{name}</span>)}
+          </div>
+        )}
+        <span style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 0.75rem; display: block;">{subject.sectionCount} section{subject.sectionCount === 1 ? '' : 's'}</span>
+      </a>
+    ))}
+  </div>
+
+  {examFilters.length > 1 && (
+    <p id="notes-empty-state" style="display: none; color: var(--color-text-muted); margin-top: 1rem;">
+      No notes tagged for this exam yet.
+    </p>
+  )}
+
+  <script>
+    const pills = document.querySelectorAll<HTMLButtonElement>('.filter-pill');
+    const cards = document.querySelectorAll<HTMLElement>('#notes-grid .section-card');
+    const emptyState = document.getElementById('notes-empty-state');
+
+    pills.forEach((pill) => {
+      pill.addEventListener('click', () => {
+        pills.forEach((p) => p.classList.remove('active'));
+        pill.classList.add('active');
+
+        const filter = pill.dataset.filter;
+        let visibleCount = 0;
+
+        cards.forEach((card) => {
+          const examIds = (card.dataset.exams || '').split(',').filter(Boolean);
+          const show = filter === 'all' || examIds.includes(filter || '');
+          card.style.display = show ? '' : 'none';
+          if (show) visibleCount++;
+        });
+
+        if (emptyState) emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+      });
+    });
+  </script>
+</NotesLayout>

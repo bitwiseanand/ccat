@@ -1,0 +1,125 @@
+---
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings: Heading[];
+}
+
+const { headings } = Astro.props;
+
+// Only show h2 and h3
+const toc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
+
+if (toc.length < 3) return;
+---
+
+<nav class="toc toc-desktop" aria-label="Table of contents">
+  <h2>On this page</h2>
+  <ul>
+    {toc.map(heading => (
+      <li class={`depth-${heading.depth}`}>
+        <a href={`#${heading.slug}`}>{heading.text}</a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<details class="toc toc-mobile">
+  <summary>
+    <span>Jump to section</span>
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.5"/></svg>
+  </summary>
+  <ul>
+    {toc.map(heading => (
+      <li class={`depth-${heading.depth}`}>
+        <a href={`#${heading.slug}`}>{heading.text}</a>
+      </li>
+    ))}
+  </ul>
+</details>
+
+<style>
+  .toc h2 {
+    margin: 0 0 0.75rem 0;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+  }
+  .toc ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .toc a {
+    display: block;
+    padding: 0.35rem 0.5rem;
+    color: #475569;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background 0.15s, color 0.15s;
+  }
+  .toc a:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+  }
+  .toc .depth-3 a {
+    padding-left: 1.25rem;
+    font-size: 0.8rem;
+  }
+
+  /* Desktop: sticky sidebar, as before */
+  .toc-desktop {
+    position: sticky;
+    top: 2rem;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    font-size: 0.875rem;
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+  }
+
+  /* Mobile: collapsible disclosure above the content, no JS required */
+  .toc-mobile {
+    display: none;
+  }
+  @media (max-width: 900px) {
+    .toc-desktop { display: none; }
+    .toc-mobile {
+      display: block;
+      margin-bottom: 1.5rem;
+      padding: 0.85rem 1rem;
+      background: #f8fafc;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      font-size: 0.9rem;
+    }
+    .toc-mobile summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      font-weight: 600;
+      color: #0f172a;
+      list-style: none;
+    }
+    .toc-mobile summary::-webkit-details-marker { display: none; }
+    .toc-mobile summary svg { transition: transform 0.2s; }
+    .toc-mobile[open] summary svg { transform: rotate(180deg); }
+    .toc-mobile ul {
+      margin-top: 0.75rem;
+      max-height: 50vh;
+      overflow-y: auto;
+    }
+    .toc-mobile h2 { display: none; }
+  }
+</style>

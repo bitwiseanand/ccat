@@ -1,0 +1,256 @@
+---
+import { getCollection } from 'astro:content';
+import ExamLayout from '../../layouts/ExamLayout.astro';
+import { exams, getExamConfig } from '../../data/exams';
+
+export async function getStaticPaths() {
+  return exams.map(e => ({ params: { exam: e.id } }));
+}
+
+const { exam } = Astro.params;
+const examConfig = getExamConfig(exam)!;
+
+const [sheets, mcqs, flashcards, blog] = await Promise.all([
+  getCollection('cheatsheets', s => s.data.exam === exam),
+  getCollection('mcqs', m => m.data.exam === exam),
+  getCollection('flashcards', f => f.data.exam === exam),
+  getCollection('blog', b => b.data.exam === exam),
+]);
+
+// Group cheat sheets by subject
+const sheetsBySubject = examConfig.subjects.map(sub => ({
+  ...sub,
+  items: sheets.filter(s => s.data.subject === sub.id),
+})).filter(g => g.items.length > 0);
+
+const recentBlog = blog.sort((a, b) => 
+  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+).slice(0, 3);
+---
+
+<ExamLayout
+  title={`${examConfig.name} — Free Cheat Sheets, MCQs & Flashcards`}
+  description={examConfig.description}
+  exam={exam}
+  type="collection"
+  noIndex={sheets.length === 0 && mcqs.length === 0 && flashcards.length === 0 && blog.length === 0}
+  breadcrumbs={[{ label: examConfig.name, href: `/${exam}/` }]}
+>
+  <div class="exam-landing">
+    <header class="exam-hero" style={`--exam-color: ${examConfig.color}`}>
+      <h1>{examConfig.fullName}</h1>
+      <p>{examConfig.description}</p>
+      <div class="exam-stats">
+        <span>{sheets.length} Cheat Sheets</span>
+        <span>{mcqs.length} MCQ Decks</span>
+        <span>{flashcards.length} Flashcard Decks</span>
+        <span>{blog.length} Articles</span>
+      </div>
+    </header>
+
+    {sheetsBySubject.length > 0 && (
+      <section class="subject-sections">
+        <h2>Cheat Sheets by Subject</h2>
+        {sheetsBySubject.map(group => (
+          <div class="subject-group" id={group.id}>
+            <h3>{group.name}</h3>
+            <div class="subject-grid">
+              {group.items.map(sheet => {
+                const slug = sheet.id.replace(/\.md$/, '').replace(`${exam}/`, '');
+                return (
+                  <a href={`/${exam}/cheat-sheets/${slug}/`} class="content-card">
+                    <h4>{sheet.data.title}</h4>
+                    <p>{sheet.data.description}</p>
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </section>
+    )}
+
+    {mcqs.length > 0 && (
+      <section class="mcq-preview">
+        <h2>Practice MCQs</h2>
+        <div class="subject-grid">
+          {mcqs.map(mcq => {
+            const slug = mcq.id.replace(`${exam}/`, '');
+            return (
+              <a href={`/${exam}/mcqs/${slug}/`} class="content-card mcq-card">
+                <h4>{mcq.data.title}</h4>
+                <p>{mcq.data.description}</p>
+                <span class="question-count">{mcq.data.questions.length} questions</span>
+              </a>
+            );
+          })}
+        </div>
+      </section>
+    )}
+
+    {recentBlog.length > 0 && (
+      <section class="blog-preview">
+        <h2>Latest Articles</h2>
+        <div class="blog-grid">
+          {recentBlog.map(post => {
+            const slug = post.id.replace(/\.md$/, '').replace(`${exam}/`, '');
+            return (
+              <a href={`/${exam}/blog/${slug}/`} class="blog-card">
+                <span class="blog-category">{post.data.category}</span>
+                <h4>{post.data.title}</h4>
+                <p>{post.data.description}</p>
+                <span class="blog-date">{post.data.date.toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+              </a>
+            );
+          })}
+        </div>
+      </section>
+    )}
+  </div>
+</ExamLayout>
+
+<style>
+  .exam-landing {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+  .exam-hero {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: linear-gradient(135deg, var(--exam-color) 0%, color-mix(in srgb, var(--exam-color) 70%, black) 100%);
+    color: white;
+    border-radius: 16px;
+    margin: 0 -1.5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  .exam-hero h1 {
+    margin: 0 0 0.75rem 0;
+    font-size: 2rem;
+    color: white;
+  }
+  .exam-hero p {
+    margin: 0 auto 1.5rem;
+    max-width: 600px;
+    opacity: 0.9;
+    font-size: 1.05rem;
+  }
+  .exam-stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  .exam-stats span {
+    background: rgba(255,255,255,0.15);
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+  }
+
+  .subject-sections h2,
+  .mcq-preview h2,
+  .blog-preview h2 {
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+  }
+  .subject-group {
+    margin-bottom: 2rem;
+  }
+  .subject-group h3 {
+    font-size: 1.1rem;
+    color: #334155;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--exam-color);
+    display: inline-block;
+  }
+  .subject-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+  .content-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 1.25rem;
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow 0.2s, border-color 0.2s;
+    display: flex;
+    flex-direction: column;
+  }
+  .content-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    border-color: var(--exam-color);
+  }
+  .content-card h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+    color: #0f172a;
+  }
+  .content-card p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #64748b;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .question-count {
+    margin-top: auto;
+    padding-top: 0.75rem;
+    font-size: 0.8rem;
+    color: var(--exam-color);
+    font-weight: 600;
+  }
+
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .blog-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 1.25rem;
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow 0.2s;
+  }
+  .blog-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  }
+  .blog-category {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--exam-color);
+    font-weight: 700;
+  }
+  .blog-card h4 {
+    margin: 0.5rem 0;
+    font-size: 1.05rem;
+    color: #0f172a;
+  }
+  .blog-card p {
+    margin: 0 0 0.75rem 0;
+    font-size: 0.85rem;
+    color: #64748b;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .blog-date {
+    font-size: 0.8rem;
+    color: #94a3b8;
+  }
+</style>

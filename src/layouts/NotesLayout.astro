@@ -1,0 +1,140 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  breadcrumbs?: { label: string; href: string }[];
+  noIndex?: boolean;
+  headings?: { depth: number; slug: string; text: string }[];
+}
+
+const { title, description = '', breadcrumbs = [], noIndex = false, headings = [] } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} breadcrumbs={breadcrumbs} noIndex={noIndex}>
+  {breadcrumbs.length > 0 && <Breadcrumbs items={breadcrumbs} />}
+
+  <div class="notes-layout">
+    <aside class="toc-sidebar">
+      <TableOfContents headings={headings} />
+    </aside>
+
+    <article class="notes-article">
+      <slot />
+    </article>
+  </div>
+</BaseLayout>
+
+<style>
+  .notes-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 2.5rem;
+    align-items: start;
+  }
+  @media (max-width: 900px) {
+    .notes-layout { grid-template-columns: 1fr; }
+  }
+  .toc-sidebar {
+    position: relative;
+  }
+  .notes-article {
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 2.5rem;
+    margin: 1rem 0 3rem;
+    box-shadow: var(--shadow);
+  }
+  .notes-article :global(.notes-filter) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .notes-article :global(.filter-pill) {
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    padding: 0.4rem 0.9rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .notes-article :global(.filter-pill:hover) {
+    border-color: var(--color-primary);
+    color: var(--color-primary-dark);
+  }
+  .notes-article :global(.filter-pill.active) {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+  }
+  .notes-article :global(.exam-badges) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .notes-article :global(.exam-badge) {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-primary-dark);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    padding: 0.2rem 0.65rem;
+  }
+  .notes-article :global(.section-label) {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+    margin-bottom: 1.5rem;
+  }
+  .notes-article :global(.section-grid) {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  .notes-article :global(.section-card) {
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 1.25rem;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s;
+  }
+  .notes-article :global(.section-card:hover) {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-md);
+  }
+  .notes-article :global(.section-card h3) {
+    font-size: 1rem;
+    margin: 0 0 0.5rem;
+    color: var(--color-text);
+  }
+  .notes-article :global(.section-card p) {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+  .notes-article :global(.back-link) {
+    display: inline-block;
+    margin-top: 2rem;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    font-size: 0.875rem;
+  }
+  .notes-article :global(.back-link:hover) {
+    color: var(--color-text);
+  }
+</style>

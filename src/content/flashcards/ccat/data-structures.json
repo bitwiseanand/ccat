@@ -1,0 +1,70 @@
+{
+  "title": "Data Structures",
+  "exam": "ccat",
+  "subject": "data-structures",
+  "topic": "dsa-overview",
+  "description": "Flashcards for data structures covering arrays, linked lists, trees, graphs, and sorting algorithms for C-CAT. Essential revision material for C-CAT aspira...",
+  "relatedCheatsheet": "data-structures-cheat-sheet",
+  "cards": [
+    {
+      "front": "Time complexity of array access",
+      "back": "O(1) \u2014 random access by index"
+    },
+    {
+      "front": "Time complexity of binary search",
+      "back": "O(log n) \u2014 requires a sorted array"
+    },
+    {
+      "front": "Which sorting algorithms are stable?",
+      "back": "Bubble, Insertion, Merge, and Counting sort"
+    },
+    {
+      "front": "Quick sort worst-case complexity",
+      "back": "O(n\u00b2) \u2014 happens when the pivot is always the min or max (e.g. an already-sorted array)"
+    },
+    {
+      "front": "What does an inorder traversal of a BST give you?",
+      "back": "Ascending sorted order"
+    },
+    {
+      "front": "What does the formula n\u2080 = n\u2082 + 1 mean?",
+      "back": "In any binary tree: leaf nodes = nodes with 2 children + 1"
+    },
+    {
+      "front": "Which data structure does BFS use?",
+      "back": "A queue (FIFO)"
+    },
+    {
+      "front": "Which data structure does DFS use?",
+      "back": "A stack, or the recursion call stack"
+    },
+    {
+      "front": "Which shortest-path algorithm handles negative edge weights?",
+      "back": "Bellman-Ford \u2014 Dijkstra fails with negative weights"
+    },
+    {
+      "front": "Max heap parent rule",
+      "back": "parent \u2265 children"
+    },
+    {
+      "front": "Load factor formula in hashing",
+      "back": "\u03b1 = n / m (number of elements \u00f7 number of slots)"
+    },
+    {
+      "front": "What causes primary clustering?",
+      "back": "Linear probing in open addressing"
+    },
+    {
+      "front": "What is Floyd's cycle detection technique also called?",
+      "back": "The Tortoise and Hare algorithm (slow & fast pointers)"
+    },
+    {
+      "front": "Space complexity of merge sort",
+      "back": "O(n) \u2014 needs a temporary array"
+    },
+    {
+      "front": "Space complexity of heap sort",
+      "back": "O(1) \u2014 sorts in-place"
+    }
+  ]
+}

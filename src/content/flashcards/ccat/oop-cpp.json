@@ -1,0 +1,66 @@
+{
+  "title": "OOP & C++ Flashcards",
+  "exam": "ccat",
+  "subject": "cpp-oop",
+  "topic": "oop-concepts",
+  "description": "Flashcards for OOP and C++ covering classes, inheritance, polymorphism, and STL for C-CAT preparation. Essential revision material for C-CAT aspirants.",
+  "relatedCheatsheet": "oop-cpp-cheat-sheet",
+  "cards": [
+    {
+      "front": "What are the four pillars of OOP?",
+      "back": "Encapsulation, Abstraction, Inheritance, Polymorphism"
+    },
+    {
+      "front": "Default access specifier in a C++ class",
+      "back": "private (a struct defaults to public instead)"
+    },
+    {
+      "front": "What does a pure virtual function look like, and what does it do?",
+      "back": "virtual void f() = 0; \u2014 makes the class abstract, uninstantiable"
+    },
+    {
+      "front": "Why must a base class destructor be virtual?",
+      "back": "So deleting a derived object via a base pointer also runs the derived destructor \u2014 otherwise cleanup is skipped"
+    },
+    {
+      "front": "Constructor execution order in inheritance",
+      "back": "Base class constructor runs first, then the derived class constructor"
+    },
+    {
+      "front": "Destructor execution order in inheritance",
+      "back": "Reverse of construction \u2014 derived class destructor first, then base"
+    },
+    {
+      "front": "What does the 'this' pointer refer to?",
+      "back": "A pointer to the calling object, implicitly passed to every non-static member function"
+    },
+    {
+      "front": "How many copies of a static data member exist across all objects of a class?",
+      "back": "Just 1 \u2014 shared by the entire class, not per-object"
+    },
+    {
+      "front": "What problem does virtual inheritance solve?",
+      "back": "The diamond problem \u2014 duplicate copies of a shared base class"
+    },
+    {
+      "front": "Difference between function overloading and overriding",
+      "back": "Overloading = same name, different parameters, resolved at compile-time. Overriding = same signature in a derived class, resolved at runtime, needs virtual"
+    },
+    {
+      "front": "Which operators cannot be overloaded in C++?",
+      "back": ":: (scope resolution), . (member access), .*, ?: (ternary), sizeof, typeid"
+    },
+    {
+      "front": "What must new[] be paired with?",
+      "back": "delete[] \u2014 mismatching it with a plain delete causes undefined behavior"
+    },
+    {
+      "front": "What is a friend function?",
+      "back": "A non-member function explicitly granted access to a class's private and protected members"
+    },
+    {
+      "front": "Which STL container keeps its elements in sorted order automatically?",
+      "back": "std::map \u2014 implemented as a self-balancing tree (typically Red-Black)"
+    }
+  ]
+}

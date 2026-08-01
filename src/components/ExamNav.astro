@@ -1,0 +1,79 @@
+---
+import { getExamConfig } from '../data/exams';
+
+interface Props {
+  exam: string;
+}
+
+const { exam } = Astro.props;
+const examConfig = getExamConfig(exam);
+const currentPath = Astro.url.pathname;
+
+if (!examConfig) return;
+
+const navItems = [
+  { label: 'Cheat Sheets', href: `/${exam}/cheat-sheets/`, id: 'cheat-sheets' },
+  { label: 'MCQs', href: `/${exam}/mcqs/`, id: 'mcqs' },
+  { label: 'Flashcards', href: `/${exam}/flashcards/`, id: 'flashcards' },
+  { label: 'Blog', href: `/${exam}/blog/`, id: 'blog' },
+  { label: 'Notes', href: `/notes/`, id: 'notes' },
+].filter(item => item.id === 'notes' || examConfig.features.includes(item.id as any));
+---
+
+<nav class="exam-nav" style={`--exam-color: ${examConfig.color}`} aria-label={`${examConfig.name} navigation`}>
+  <div class="exam-nav-container">
+    <a href={`/${exam}/`} class="exam-name">{examConfig.name}</a>
+    <div class="exam-links">
+      {navItems.map(item => (
+        <a 
+          href={item.href} 
+          class={currentPath.startsWith(item.href) || (item.id === 'notes' && currentPath.startsWith('/notes')) ? 'active' : ''}
+        >
+          {item.label}
+        </a>
+      ))}
+    </div>
+  </div>
+</nav>
+
+<style>
+  .exam-nav {
+    background: linear-gradient(135deg, var(--exam-color) 0%, color-mix(in srgb, var(--exam-color) 80%, black) 100%);
+    color: white;
+  }
+  .exam-nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+  .exam-name {
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1rem;
+    white-space: nowrap;
+  }
+  .exam-links {
+    display: flex;
+    gap: 0.25rem;
+    overflow-x: auto;
+  }
+  .exam-links a {
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    white-space: nowrap;
+    transition: background 0.2s, color 0.2s;
+  }
+  .exam-links a:hover,
+  .exam-links a.active {
+    background: rgba(255,255,255,0.15);
+    color: white;
+  }
+</style>

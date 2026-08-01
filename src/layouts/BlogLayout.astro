@@ -1,0 +1,99 @@
+---
+import ExamLayout from './ExamLayout.astro';
+import RelatedContent from '../components/RelatedContent.astro';
+import FAQ from '../components/FAQ.astro';
+import type { ContentItem } from '../utils/content';
+
+interface Props {
+  title: string;
+  description: string;
+  exam: string;
+  category: string;
+  date: Date;
+  updatedDate?: Date;
+  readTime?: string;
+  keywords?: string[];
+  breadcrumbs: { label: string; href: string }[];
+  relatedItems: ContentItem[];
+  faq?: { question: string; answer: string }[];
+}
+
+const { title, description, exam, category, date, updatedDate, readTime, keywords, breadcrumbs, relatedItems, faq } = Astro.props;
+---
+
+<ExamLayout
+  title={title}
+  description={description}
+  exam={exam}
+  type="article"
+  date={date}
+  updatedDate={updatedDate}
+  keywords={keywords}
+  breadcrumbs={breadcrumbs}
+  faq={faq}
+>
+  <article class="blog-post">
+    <header class="blog-header">
+      <h1>{title}</h1>
+      <div class="blog-meta">
+        <span class="category">{category}</span>
+        <span class="date">{date.toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+        {readTime && <span class="read-time">{readTime} read</span>}
+      </div>
+    </header>
+
+    <div class="blog-content">
+      <slot />
+    </div>
+
+    {faq && <FAQ faq={faq} />}
+    <RelatedContent items={relatedItems} />
+  </article>
+</ExamLayout>
+
+<style>
+  .blog-post {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .blog-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .blog-header h1 {
+    margin: 0 0 1rem 0;
+    font-size: 2.25rem;
+    line-height: 1.2;
+  }
+  .blog-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+  }
+  .category {
+    background: var(--color-surface);
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+  }
+  .blog-content {
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+  .blog-content :global(h2) {
+    margin-top: 2.5rem;
+    font-size: 1.5rem;
+  }
+  .blog-content :global(h3) {
+    margin-top: 2rem;
+    font-size: 1.2rem;
+  }
+  .blog-content :global(p) {
+    margin: 1rem 0;
+  }
+</style>

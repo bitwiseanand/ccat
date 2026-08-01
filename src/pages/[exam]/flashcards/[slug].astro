@@ -1,0 +1,224 @@
+---
+import { getCollection } from 'astro:content';
+import ExamLayout from '../../../layouts/ExamLayout.astro';
+import { getExamConfig } from '../../../data/exams';
+
+export async function getStaticPaths() {
+  const flashcards = await getCollection('flashcards');
+  return flashcards.map(deck => {
+    const parts = deck.id.split('/');
+    const exam = parts[0];
+    const slug = parts.slice(1).join('/');
+    return {
+      params: { exam, slug },
+      props: { deck },
+    };
+  });
+}
+
+const { deck } = Astro.props;
+const examConfig = getExamConfig(deck.data.exam);
+const examName = examConfig?.name || deck.data.exam.toUpperCase();
+
+const breadcrumbs = [
+  { label: examName, href: `/${deck.data.exam}/` },
+  { label: 'Flashcards', href: `/${deck.data.exam}/flashcards/` },
+  { label: deck.data.title, href: '#' },
+];
+---
+
+<ExamLayout
+  title={deck.data.title}
+  description={deck.data.description}
+  exam={deck.data.exam}
+  type="quiz"
+  breadcrumbs={breadcrumbs}
+>
+  <div class="flashcard-deck" data-flashcard-data={JSON.stringify(deck.data.cards)}>
+    <header class="flashcard-header">
+      <h1>{deck.data.title}</h1>
+      <p class="flashcard-description">{deck.data.description}</p>
+      <div class="flashcard-progress">
+        <span class="progress-text">Card <span id="current-card">1</span> of {deck.data.cards.length}</span>
+        <div class="progress-bar"><div class="progress-fill" id="card-progress-fill"></div></div>
+      </div>
+    </header>
+
+    <div class="flashcard-container" id="flashcard-container">
+      {deck.data.cards.map((card, idx) => (
+        <div class="flashcard" data-index={idx} style={idx === 0 ? '' : 'display:none'}>
+          <div class="flashcard-inner">
+            <div class="flashcard-front">
+              <div class="card-label">Question</div>
+              <p>{card.front}</p>
+              <button class="flip-btn">Show Answer</button>
+            </div>
+            <div class="flashcard-back">
+              <div class="card-label">Answer</div>
+              <p>{card.back}</p>
+              <div class="card-actions">
+                <button class="action-btn again-btn" data-rating="again">Again</button>
+                <button class="action-btn hard-btn" data-rating="hard">Hard</button>
+                <button class="action-btn good-btn" data-rating="good">Good</button>
+                <button class="action-btn easy-btn" data-rating="easy">Easy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="flashcard-nav">
+      <button class="nav-btn" id="prev-card" disabled>← Previous</button>
+      <button class="nav-btn" id="next-card">Next →</button>
+    </div>
+
+    <div class="flashcard-summary" id="flashcard-summary" style="display:none">
+      <h2>Deck Complete!</h2>
+      <p>You've reviewed all {deck.data.cards.length} cards.</p>
+      <button class="restart-btn" onclick="location.reload()">Review Again</button>
+    </div>
+  </div>
+
+  {deck.data.relatedCheatsheet && (
+    <div class="related-cheatsheet">
+      <p>📖 Study first: <a href={`/${deck.data.exam}/cheat-sheets/${deck.data.relatedCheatsheet}/`}>View Cheat Sheet</a></p>
+    </div>
+  )}
+</ExamLayout>
+
+<script src="/js/flashcards.js" is:inline></script>
+
+<style>
+  .flashcard-deck { max-width: 600px; margin: 0 auto; }
+  .flashcard-header { margin-bottom: 2rem; }
+  .flashcard-header h1 { margin: 0 0 0.5rem; }
+  .flashcard-description { color: #64748b; margin: 0 0 1rem; }
+  .flashcard-progress { display: flex; align-items: center; gap: 1rem; }
+  .progress-text { font-size: 0.875rem; color: #64748b; white-space: nowrap; }
+  .progress-bar { flex: 1; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--exam-color); border-radius: 3px; transition: width 0.3s; width: 0%; }
+
+  .flashcard {
+    perspective: 1000px;
+    min-height: 280px;
+    margin-bottom: 1.5rem;
+  }
+  .flashcard-inner {
+    position: relative;
+    width: 100%;
+    min-height: 280px;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    cursor: pointer;
+  }
+  .flashcard.flipped .flashcard-inner {
+    transform: rotateY(180deg);
+  }
+  .flashcard-front, .flashcard-back {
+    position: absolute;
+    width: 100%;
+    min-height: 280px;
+    backface-visibility: hidden;
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .flashcard-back {
+    transform: rotateY(180deg);
+    background: #f8fafc;
+  }
+  .card-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #94a3b8;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .flashcard-front p, .flashcard-back p {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0 0 1.5rem;
+    line-height: 1.5;
+  }
+  .flip-btn {
+    padding: 0.6rem 1.5rem;
+    border-radius: 8px;
+    border: 2px solid var(--exam-color);
+    background: transparent;
+    color: var(--exam-color);
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+  .card-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .action-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: none;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 0.85rem;
+  }
+  .again-btn { background: #fee2e2; color: #991b1b; }
+  .hard-btn { background: #fef9c3; color: #854d0e; }
+  .good-btn { background: #dcfce7; color: #166534; }
+  .easy-btn { background: #dbeafe; color: #1e40af; }
+  .flashcard-nav {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+  .nav-btn {
+    padding: 0.6rem 1.5rem;
+    border-radius: 8px;
+    border: none;
+    background: var(--exam-color);
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+  .nav-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .flashcard-summary {
+    text-align: center;
+    padding: 3rem;
+    background: white;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+  }
+  .restart-btn {
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    border: none;
+    background: var(--exam-color);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 1rem;
+  }
+  .related-cheatsheet {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: #f0f9ff;
+    border-radius: 8px;
+    text-align: center;
+  }
+  .related-cheatsheet a { font-weight: 600; }
+</style>

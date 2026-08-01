@@ -1,0 +1,98 @@
+{
+  "title": "Computer Networks",
+  "exam": "ccat",
+  "subject": "computer-networks",
+  "topic": "networking-basics",
+  "description": "Practice MCQs on OSI model, TCP/IP, routing, switching, and network protocols for C-CAT computer networks preparation. Essential revision material for C-CA...",
+  "relatedCheatsheet": "computer-networks-cheat-sheet",
+  "questions": [
+    {
+      "question": "How many layers does the OSI model have?",
+      "options": [
+        "4",
+        "5",
+        "7",
+        "6"
+      ],
+      "correct": 2,
+      "explanation": "The OSI model has 7 layers: Physical, Data Link, Network, Transport, Session, Presentation, and Application."
+    },
+    {
+      "question": "Which transport protocol is connection-oriented and reliable?",
+      "options": [
+        "UDP",
+        "IP",
+        "TCP",
+        "ICMP"
+      ],
+      "correct": 2,
+      "explanation": "Correct answer: TCP."
+    },
+    {
+      "question": "What is the default port number for HTTPS?",
+      "options": [
+        "80",
+        "21",
+        "443",
+        "25"
+      ],
+      "correct": 2,
+      "explanation": "HTTPS uses port 443 by default; HTTP uses port 80."
+    },
+    {
+      "question": "A switch forwards frames based on which address?",
+      "options": [
+        "IP address",
+        "MAC address",
+        "Port number",
+        "Domain name"
+      ],
+      "correct": 1,
+      "explanation": "Correct answer: MAC address."
+    },
+    {
+      "question": "RIP (Routing Information Protocol) is an example of which routing approach?",
+      "options": [
+        "Distance Vector",
+        "Link State",
+        "Static Routing",
+        "Hybrid Routing"
+      ],
+      "correct": 0,
+      "explanation": "RIP (Routing Information Protocol) is a Distance Vector routing protocol using hop count."
+    },
+    {
+      "question": "Which error detection method is most effective at catching burst errors?",
+      "options": [
+        "Parity bit",
+        "Checksum",
+        "CRC",
+        "All are equally effective"
+      ],
+      "correct": 2,
+      "explanation": "CRC (Cyclic Redundancy Check) is the most effective method for detecting burst errors."
+    },
+    {
+      "question": "How many usable host addresses exist in a /24 subnet?",
+      "options": [
+        "256",
+        "254",
+        "255",
+        "128"
+      ],
+      "correct": 1,
+      "explanation": "A /24 subnet has 256 total addresses; subtract 2 (network and broadcast) for 254 usable hosts."
+    },
+    {
+      "question": "What switching technique does the modern internet primarily use?",
+      "options": [
+        "Circuit switching",
+        "Message switching",
+        "Packet switching",
+        "None of these"
+      ],
+      "correct": 2,
+      "explanation": "Correct answer: Packet switching."
+    }
+  ]
+}

@@ -1,0 +1,111 @@
+---
+import { getCollection } from 'astro:content';
+import ExamLayout from '../../../layouts/ExamLayout.astro';
+import { exams, getExamConfig } from '../../../data/exams';
+
+export async function getStaticPaths() {
+  return exams.map(e => ({ params: { exam: e.id } }));
+}
+
+const { exam } = Astro.params;
+const examConfig = getExamConfig(exam)!;
+
+const flashcards = await getCollection('flashcards', f => f.data.exam === exam);
+
+const bySubject = examConfig.subjects.map(sub => ({
+  ...sub,
+  items: flashcards.filter(f => f.data.subject === sub.id),
+})).filter(g => g.items.length > 0);
+---
+
+<ExamLayout
+  title={`${examConfig.name} Flashcards — Quick Memory Revision`}
+  description={`Free ${examConfig.name} flashcards for quick memory revision. Flip cards to test your recall. No account required.`}
+  exam={exam}
+  type="collection"
+  noIndex={flashcards.length === 0}
+  breadcrumbs={[
+    { label: examConfig.name, href: `/${exam}/` },
+    { label: 'Flashcards', href: `/${exam}/flashcards/` },
+  ]}
+>
+  <div class="hub-page">
+    <header class="hub-header">
+      <h1>{examConfig.name} Flashcards</h1>
+      <p>Flip cards to test your recall. Perfect for quick revision sessions.</p>
+    </header>
+
+    {bySubject.map(group => (
+      <section class="subject-group" id={group.id}>
+        <h2>{group.name}</h2>
+        <div class="cards-grid">
+          {group.items.map(deck => {
+            const slug = deck.id.replace(`${exam}/`, '');
+            return (
+              <a href={`/${exam}/flashcards/${slug}/`} class="hub-card">
+                <h3>{deck.data.title}</h3>
+                <p>{deck.data.description}</p>
+                <span class="card-count">{deck.data.cards.length} cards</span>
+              </a>
+            );
+          })}
+        </div>
+      </section>
+    ))}
+
+    {flashcards.length === 0 && (
+      <div class="empty-state">
+        <p>No flashcards available yet for {examConfig.name}.</p>
+        <p>Check back soon — we're adding decks regularly.</p>
+      </div>
+    )}
+  </div>
+</ExamLayout>
+
+<style>
+  .hub-page { display: flex; flex-direction: column; gap: 2.5rem; }
+  .hub-header { text-align: center; padding: 1rem 0; }
+  .hub-header h1 { margin: 0 0 0.5rem; font-size: 2rem; }
+  .hub-header p { color: #64748b; margin: 0; }
+  .subject-group h2 {
+    font-size: 1.1rem;
+    color: #334155;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--exam-color);
+    display: inline-block;
+  }
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+  .hub-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 1.25rem;
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow 0.2s, border-color 0.2s;
+    display: flex;
+    flex-direction: column;
+  }
+  .hub-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    border-color: var(--exam-color);
+  }
+  .hub-card h3 { margin: 0 0 0.5rem; font-size: 1rem; color: #0f172a; }
+  .hub-card p { margin: 0; font-size: 0.85rem; color: #64748b; line-height: 1.5; flex: 1; }
+  .card-count {
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+    color: var(--exam-color);
+    font-weight: 600;
+  }
+  .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #64748b;
+  }
+</style>

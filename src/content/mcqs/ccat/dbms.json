@@ -1,0 +1,98 @@
+{
+  "title": "DBMS Practice MCQs",
+  "exam": "ccat",
+  "subject": "dbms",
+  "topic": "dbms-basics",
+  "description": "DBMS practice MCQs covering SQL, normalization, transactions, indexing, and keys for C-CAT exam preparation. Essential revision material for C-CAT aspirants.",
+  "relatedCheatsheet": "dbms-cheat-sheet",
+  "questions": [
+    {
+      "question": "Can a Primary Key column contain a NULL value?",
+      "options": [
+        "Yes, one NULL is allowed",
+        "No, never",
+        "Yes, if it's a composite key",
+        "Only in older SQL standards"
+      ],
+      "correct": 1,
+      "explanation": "A Primary Key must be unique and non-NULL by definition; it uniquely identifies each row."
+    },
+    {
+      "question": "GRANT and REVOKE belong to which SQL command category?",
+      "options": [
+        "DDL",
+        "DML",
+        "DCL",
+        "TCL"
+      ],
+      "correct": 2,
+      "explanation": "GRANT and REVOKE are DCL (Data Control Language) commands for managing permissions."
+    },
+    {
+      "question": "What does 2NF specifically eliminate?",
+      "options": [
+        "Transitive dependency",
+        "Partial dependency on a composite key",
+        "Multi-valued dependency",
+        "Redundant tables"
+      ],
+      "correct": 1,
+      "explanation": "2NF eliminates partial dependencies \u2014 non-key attributes must depend on the entire composite key."
+    },
+    {
+      "question": "What does 3NF specifically eliminate?",
+      "options": [
+        "Partial dependency",
+        "Transitive dependency",
+        "Atomic value violations",
+        "Duplicate rows"
+      ],
+      "correct": 1,
+      "explanation": "3NF eliminates transitive dependencies \u2014 non-key attributes must depend only on the primary key."
+    },
+    {
+      "question": "Which join returns all rows from the left table, with NULLs where there's no match in the right?",
+      "options": [
+        "INNER JOIN",
+        "RIGHT JOIN",
+        "LEFT JOIN",
+        "FULL OUTER JOIN"
+      ],
+      "correct": 2,
+      "explanation": "Correct answer: LEFT JOIN."
+    },
+    {
+      "question": "How many clustered indexes can a single table have?",
+      "options": [
+        "As many as needed",
+        "Only 1",
+        "Exactly 2",
+        "0 \u2014 they don't exist in DBMS"
+      ],
+      "correct": 1,
+      "explanation": "A table can have only one clustered index because it determines the physical storage order of rows."
+    },
+    {
+      "question": "In Two-Phase Locking, what happens once a transaction releases its first lock?",
+      "options": [
+        "It can still acquire new locks freely",
+        "It cannot acquire any new locks \u2014 shrinking phase begins",
+        "The transaction is automatically rolled back",
+        "All other transactions are blocked"
+      ],
+      "correct": 1,
+      "explanation": "In Two-Phase Locking, once a transaction releases its first lock, it enters the shrinking phase and cannot acquire new locks."
+    },
+    {
+      "question": "Which ACID property guarantees that committed changes survive a system crash?",
+      "options": [
+        "Atomicity",
+        "Consistency",
+        "Isolation",
+        "Durability"
+      ],
+      "correct": 3,
+      "explanation": "Correct answer: Durability."
+    }
+  ]
+}

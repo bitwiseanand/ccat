@@ -1,0 +1,69 @@
+---
+import { getCollection } from 'astro:content';
+import CheatSheetLayout from '../../../layouts/CheatSheetLayout.astro';
+import { getRelatedContent } from '../../../utils/content';
+import { getExamConfig } from '../../../data/exams';
+
+export async function getStaticPaths() {
+  const sheets = await getCollection('cheatsheets');
+  return sheets.map(sheet => {
+    const parts = sheet.id.replace(/\.md$/, '').split('/');
+    const exam = parts[0];
+    const slug = parts.slice(1).join('/');
+    return {
+      params: { exam, slug },
+      props: { sheet },
+    };
+  });
+}
+
+const { sheet } = Astro.props;
+const { Content, headings } = await sheet.render();
+
+const examConfig = getExamConfig(sheet.data.exam);
+const examName = examConfig?.name || sheet.data.exam.toUpperCase();
+
+const related = await getRelatedContent({
+  exam: sheet.data.exam,
+  subject: sheet.data.subject,
+  topic: sheet.data.topic,
+  slug: sheet.id.replace(/\.md$/, ''),
+  collection: 'cheat-sheets',
+}, 4);
+
+// Cross-link to the matching Notes subject, if one exists with real
+// sections (not just a bare overview stub) — mirrors the relatedCheatsheet
+// link going the other direction from Notes pages.
+let notesLink: { href: string; label: string } | null = null;
+{
+  const allNotes = await getCollection('notes');
+  const subjectNotes = allNotes.filter((n) => n.id.startsWith(`${sheet.data.subject}/`) && !n.id.endsWith('/overview'));
+  if (subjectNotes.length > 0) {
+    const subjectLabel = sheet.data.subject.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase());
+    notesLink = { href: `/notes/${sheet.data.subject}/`, label: subjectLabel };
+  }
+}
+
+const breadcrumbs = [
+  { label: examName, href: `/${sheet.data.exam}/` },
+  { label: 'Cheat Sheets', href: `/${sheet.data.exam}/cheat-sheets/` },
+  { label: sheet.data.title, href: '#' },
+];
+---
+
+<CheatSheetLayout
+  title={sheet.data.title}
+  description={sheet.data.description}
+  exam={sheet.data.exam}
+  subject={sheet.data.subject}
+  date={sheet.data.lastVerified}
+  updatedDate={sheet.data.updatedDate}
+  keywords={sheet.data.keywords}
+  breadcrumbs={breadcrumbs}
+  headings={headings}
+  relatedItems={related}
+  faq={sheet.data.faq}
+  notesLink={notesLink}
+>
+  <Content />
+</CheatSheetLayout>

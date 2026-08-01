@@ -1,0 +1,238 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { exams } from '../data/exams';
+import { getCollection } from 'astro:content';
+
+const allSheets = await getCollection('cheatsheets');
+const allMcqs = await getCollection('mcqs');
+const allFlashcards = await getCollection('flashcards');
+
+const stats = {
+  cheatSheets: allSheets.length,
+  mcqs: allMcqs.reduce((acc, m) => acc + m.data.questions.length, 0),
+  flashcards: allFlashcards.reduce((acc, f) => acc + f.data.cards.length, 0),
+};
+---
+
+<BaseLayout
+  title="ExamCheatSheets — Free Cheat Sheets & MCQs for CS Exams"
+  description="Structured, accuracy-checked cheat sheets, MCQs, and flashcards for C-CAT, GATE CSE, and more. No login, no paywall. Built for the final revision stretch."
+  type="website"
+  keywords={['exam cheat sheets', 'C-CAT preparation', 'GATE CSE', 'free MCQs', 'computer science exams']}
+>
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Everything you need to crack technical exams.</h1>
+      <p class="hero-subtitle">
+        Structured, accuracy-checked cheat sheets, MCQs, and flashcards — 
+        built for the final revision stretch before your exam, not for starting from zero.
+      </p>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-number">{stats.cheatSheets}+</span>
+          <span class="stat-label">Cheat Sheets</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">{stats.mcqs}+</span>
+          <span class="stat-label">Practice MCQs</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">{stats.flashcards}+</span>
+          <span class="stat-label">Flashcards</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="exams-section">
+    <h2>Popular Exams</h2>
+    <p class="section-subtitle">Pick your exam to see everything available for it.</p>
+    <div class="exams-grid">
+      {exams.map(exam => {
+        const examSheets = allSheets.filter(s => s.data.exam === exam.id);
+        const examMcqs = allMcqs.filter(m => m.data.exam === exam.id);
+        return (
+          <a href={`/${exam.id}/`} class="exam-card" style={`--exam-color: ${exam.color}`}>
+            <div class="exam-card-header">
+              <span class="exam-dot" style={`background: ${exam.color}`}></span>
+              <h3>{exam.name}</h3>
+            </div>
+            <p class="exam-fullname">{exam.fullName}</p>
+            <div class="exam-card-stats">
+              <span>{examSheets.length} cheat sheets</span>
+              <span>{examMcqs.length} MCQ decks</span>
+            </div>
+            <span class="exam-cta">Explore →</span>
+          </a>
+        );
+      })}
+    </div>
+  </section>
+
+  <section class="features-section">
+    <h2>Why ExamCheatSheets?</h2>
+    <div class="features-grid">
+      <div class="feature">
+        <div class="feature-icon">⚡</div>
+        <h3>Fast Revision</h3>
+        <p>Scannable reference material designed for the last few days before your exam — not textbook-length reading.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🎯</div>
+        <h3>Exam Focused</h3>
+        <p>Every cheat sheet is built around what's actually asked, with practice MCQs and flashcards for the same topic.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🔓</div>
+        <h3>Free Forever</h3>
+        <p>No login, no paywall, no account required to read a cheat sheet or take a quiz.</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    text-align: center;
+    padding: 4rem 0 3rem;
+  }
+  .hero h1 {
+    font-size: 2.5rem;
+    max-width: 700px;
+    margin: 0 auto 1rem;
+    line-height: 1.2;
+    color: #0f172a;
+  }
+  .hero-subtitle {
+    font-size: 1.15rem;
+    color: #475569;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    line-height: 1.6;
+  }
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 2rem;
+  }
+  .stat {
+    text-align: center;
+  }
+  .stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: 800;
+    color: #0ea5e9;
+  }
+  .stat-label {
+    font-size: 0.875rem;
+    color: #64748b;
+  }
+  @media (max-width: 600px) {
+    .hero-stats { gap: 1.5rem; }
+    .stat-number { font-size: 1.5rem; }
+  }
+
+  .exams-section {
+    padding: 3rem 0;
+  }
+  .exams-section h2 {
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+  .section-subtitle {
+    text-align: center;
+    color: #64748b;
+    margin-bottom: 2rem;
+  }
+  .exams-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+  .exam-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+    display: flex;
+    flex-direction: column;
+  }
+  .exam-card:hover {
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    transform: translateY(-2px);
+    border-color: var(--exam-color);
+  }
+  .exam-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+  .exam-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+  .exam-card h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #0f172a;
+  }
+  .exam-fullname {
+    color: #64748b;
+    font-size: 0.875rem;
+    margin: 0 0 1rem 0;
+  }
+  .exam-card-stats {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-top: auto;
+    margin-bottom: 1rem;
+  }
+  .exam-cta {
+    color: var(--exam-color);
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  .features-section {
+    padding: 3rem 0;
+    text-align: center;
+  }
+  .features-section h2 {
+    margin-bottom: 2rem;
+  }
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    text-align: left;
+  }
+  .feature {
+    padding: 1.5rem;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+  }
+  .feature-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  .feature h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+  }
+  .feature p {
+    margin: 0;
+    color: #475569;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+</style>

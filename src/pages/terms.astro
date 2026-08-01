@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Terms of Use"
+  description="ExamCheatSheets terms of use. Free educational content for personal use."
+  type="website"
+  noIndex={true}
+>
+  <div class="legal-page">
+    <h1>Terms of Use</h1>
+    <p class="updated">Last updated: July 2026</p>
+
+    <h2>Educational Use Only</h2>
+    <p>
+      All content on ExamCheatSheets is provided for educational purposes only. 
+      It is intended to supplement, not replace, formal study materials and textbooks.
+    </p>
+
+    <h2>Accuracy</h2>
+    <p>
+      While we strive for accuracy, we make no guarantees about the completeness 
+      or correctness of the content. Always cross-check with official sources.
+    </p>
+
+    <h2>Attribution</h2>
+    <p>
+      Content is original or derived from publicly available educational resources. 
+      If you believe any content infringes on your rights, please contact us.
+    </p>
+
+    <h2>No Liability</h2>
+    <p>
+      ExamCheatSheets is not liable for any exam outcomes, scores, or decisions 
+      made based on the content provided on this site.
+    </p>
+  </div>
+</BaseLayout>
+
+<style>
+  .legal-page { max-width: 720px; margin: 0 auto; }
+  .legal-page h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+  .updated { color: #64748b; font-size: 0.9rem; margin-bottom: 2rem; }
+  .legal-page h2 { margin-top: 2rem; font-size: 1.3rem; }
+</style>

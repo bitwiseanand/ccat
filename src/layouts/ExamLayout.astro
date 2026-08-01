@@ -1,0 +1,40 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import ExamNav from '../components/ExamNav.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { getExamConfig } from '../data/exams';
+
+interface Props {
+  title: string;
+  description: string;
+  exam: string;
+  subject?: string;
+  type?: 'article' | 'quiz' | 'website' | 'collection' | 'faq';
+  date?: Date;
+  updatedDate?: Date;
+  image?: string;
+  keywords?: string[];
+  breadcrumbs?: { label: string; href: string }[];
+  faq?: { question: string; answer: string }[];
+  noIndex?: boolean;
+}
+
+const { exam, breadcrumbs, ...seoProps } = Astro.props;
+const examConfig = getExamConfig(exam);
+---
+
+<BaseLayout {...seoProps} exam={exam}>
+  <ExamNav slot="exam-nav" exam={exam} />
+
+  {breadcrumbs && <Breadcrumbs items={breadcrumbs} />}
+
+  <div class="exam-layout" style={examConfig ? `--exam-color: ${examConfig.color}` : ''}>
+    <slot />
+  </div>
+</BaseLayout>
+
+<style>
+  .exam-layout {
+    --exam-color: var(--color-primary);
+  }
+</style>

@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Privacy Policy"
+  description="ExamCheatSheets privacy policy. We don't collect personal data. No cookies, no tracking."
+  type="website"
+  noIndex={true}
+>
+  <div class="legal-page">
+    <h1>Privacy Policy</h1>
+    <p class="updated">Last updated: July 2026</p>
+
+    <h2>No Personal Data Collection</h2>
+    <p>
+      ExamCheatSheets does not collect, store, or process any personal data. 
+      We don't require accounts, logins, or email addresses to use the site.
+    </p>
+
+    <h2>No Cookies</h2>
+    <p>
+      We do not use cookies for tracking or advertising. Any local storage used 
+      (e.g., for MCQ progress) is stored entirely in your browser and never transmitted to our servers.
+    </p>
+
+    <h2>Analytics</h2>
+    <p>
+      We use privacy-focused analytics that do not track individual users, 
+      do not use cookies, and do not collect personal information.
+    </p>
+
+    <h2>Third-Party Services</h2>
+    <p>
+      The site is hosted on Vercel. Vercel may collect basic server logs 
+      (IP address, user agent) for operational purposes as per their privacy policy.
+    </p>
+
+    <h2>Contact</h2>
+    <p>For privacy-related questions, contact us via <a href="/contact/">our contact page</a>.</p>
+  </div>
+</BaseLayout>
+
+<style>
+  .legal-page { max-width: 720px; margin: 0 auto; }
+  .legal-page h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+  .updated { color: #64748b; font-size: 0.9rem; margin-bottom: 2rem; }
+  .legal-page h2 { margin-top: 2rem; font-size: 1.3rem; }
+</style>

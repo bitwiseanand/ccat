@@ -1,0 +1,94 @@
+---
+import type { ContentItem } from '../utils/content';
+
+interface Props {
+  items: ContentItem[];
+}
+
+const { items } = Astro.props;
+
+if (items.length === 0) return;
+
+function getUrl(item: ContentItem): string {
+  const slug = item.id.replace(`${item.data.exam}/`, '');
+  return `/${item.data.exam}/${item.collection}/${slug}`;
+}
+
+function getTypeLabel(collection: string): string {
+  const labels: Record<string, string> = {
+    'cheat-sheets': 'Cheat Sheet',
+    'mcqs': 'MCQs',
+    'flashcards': 'Flashcards',
+    'blog': 'Blog',
+  };
+  return labels[collection] || collection;
+}
+---
+
+<aside class="related-content">
+  <h2>Continue Reading</h2>
+  <ul>
+    {items.map(item => (
+      <li>
+        <a href={getUrl(item)}>
+          <span class="type-badge">{getTypeLabel(item.collection)}</span>
+          <span class="title">{item.data.title}</span>
+          <span class="subject">{item.data.subject}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</aside>
+
+<style>
+  .related-content {
+    margin-top: 3rem;
+    padding: 1.5rem;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+  }
+  .related-content h2 {
+    margin: 0 0 1rem 0;
+    font-size: 1.25rem;
+    color: #1e293b;
+  }
+  .related-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.75rem;
+  }
+  .related-content a {
+    display: block;
+    padding: 0.75rem;
+    background: white;
+    border-radius: 8px;
+    text-decoration: none;
+    border: 1px solid #e2e8f0;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .related-content a:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    transform: translateY(-1px);
+  }
+  .type-badge {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    color: #64748b;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+  .title { 
+    display: block; 
+    font-weight: 600; 
+    margin: 0.25rem 0; 
+    color: #0f172a;
+    font-size: 0.95rem;
+  }
+  .subject { 
+    font-size: 0.8rem; 
+    color: #64748b; 
+  }
+</style>

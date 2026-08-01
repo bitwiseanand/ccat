@@ -1,0 +1,111 @@
+---
+import { getCollection } from 'astro:content';
+import ExamLayout from '../../../layouts/ExamLayout.astro';
+import { exams, getExamConfig } from '../../../data/exams';
+
+export async function getStaticPaths() {
+  return exams.map(e => ({ params: { exam: e.id } }));
+}
+
+const { exam } = Astro.params;
+const examConfig = getExamConfig(exam)!;
+
+const mcqs = await getCollection('mcqs', m => m.data.exam === exam);
+
+const bySubject = examConfig.subjects.map(sub => ({
+  ...sub,
+  items: mcqs.filter(m => m.data.subject === sub.id),
+})).filter(g => g.items.length > 0);
+---
+
+<ExamLayout
+  title={`${examConfig.name} MCQs — Practice Questions`}
+  description={`Free ${examConfig.name} practice MCQs with instant feedback. No account required. Test your knowledge with exam-focused questions.`}
+  exam={exam}
+  type="collection"
+  noIndex={mcqs.length === 0}
+  breadcrumbs={[
+    { label: examConfig.name, href: `/${exam}/` },
+    { label: 'MCQs', href: `/${exam}/mcqs/` },
+  ]}
+>
+  <div class="hub-page">
+    <header class="hub-header">
+      <h1>{examConfig.name} Practice MCQs</h1>
+      <p>Instant feedback, no account needed. Every question comes with a detailed explanation.</p>
+    </header>
+
+    {bySubject.map(group => (
+      <section class="subject-group" id={group.id}>
+        <h2>{group.name}</h2>
+        <div class="cards-grid">
+          {group.items.map(mcq => {
+            const slug = mcq.id.replace(`${exam}/`, '');
+            return (
+              <a href={`/${exam}/mcqs/${slug}/`} class="hub-card">
+                <h3>{mcq.data.title}</h3>
+                <p>{mcq.data.description}</p>
+                <span class="question-count">{mcq.data.questions.length} questions</span>
+              </a>
+            );
+          })}
+        </div>
+      </section>
+    ))}
+
+    {mcqs.length === 0 && (
+      <div class="empty-state">
+        <p>No MCQs available yet for {examConfig.name}.</p>
+        <p>Check back soon — we're adding questions regularly.</p>
+      </div>
+    )}
+  </div>
+</ExamLayout>
+
+<style>
+  .hub-page { display: flex; flex-direction: column; gap: 2.5rem; }
+  .hub-header { text-align: center; padding: 1rem 0; }
+  .hub-header h1 { margin: 0 0 0.5rem; font-size: 2rem; }
+  .hub-header p { color: #64748b; margin: 0; }
+  .subject-group h2 {
+    font-size: 1.1rem;
+    color: #334155;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--exam-color);
+    display: inline-block;
+  }
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+  .hub-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 1.25rem;
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow 0.2s, border-color 0.2s;
+    display: flex;
+    flex-direction: column;
+  }
+  .hub-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    border-color: var(--exam-color);
+  }
+  .hub-card h3 { margin: 0 0 0.5rem; font-size: 1rem; color: #0f172a; }
+  .hub-card p { margin: 0; font-size: 0.85rem; color: #64748b; line-height: 1.5; flex: 1; }
+  .question-count {
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+    color: var(--exam-color);
+    font-weight: 600;
+  }
+  .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #64748b;
+  }
+</style>

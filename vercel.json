@@ -1,0 +1,45 @@
+{
+  "framework": "astro",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+      ]
+    },
+    {
+      "source": "/(.*)\\.(js|css|svg|png|jpg|jpeg|gif|webp|avif|woff|woff2)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    }
+  ],
+  "rewrites": [
+    { "source": "/sitemap.xml", "destination": "/sitemap-index.xml" }
+  ],
+  "redirects": [
+    { "source": "/cheat-sheets", "destination": "/ccat/cheat-sheets/", "permanent": true },
+    { "source": "/cheat-sheets/", "destination": "/ccat/cheat-sheets/", "permanent": true },
+    { "source": "/cheat-sheets/:slug", "destination": "/ccat/cheat-sheets/:slug/", "permanent": true },
+    { "source": "/cheat-sheets/:slug/", "destination": "/ccat/cheat-sheets/:slug/", "permanent": true },
+
+    { "source": "/mcqs", "destination": "/ccat/mcqs/", "permanent": true },
+    { "source": "/mcqs/", "destination": "/ccat/mcqs/", "permanent": true },
+    { "source": "/mcqs/:slug", "destination": "/ccat/mcqs/:slug/", "permanent": true },
+    { "source": "/mcqs/:slug/", "destination": "/ccat/mcqs/:slug/", "permanent": true },
+
+    { "source": "/flashcards", "destination": "/ccat/flashcards/", "permanent": true },
+    { "source": "/flashcards/", "destination": "/ccat/flashcards/", "permanent": true },
+    { "source": "/flashcards/:slug", "destination": "/ccat/flashcards/:slug/", "permanent": true },
+    { "source": "/flashcards/:slug/", "destination": "/ccat/flashcards/:slug/", "permanent": true },
+
+    { "source": "/blog", "destination": "/ccat/blog/", "permanent": true },
+    { "source": "/blog/", "destination": "/ccat/blog/", "permanent": true },
+    { "source": "/blog/:slug", "destination": "/ccat/blog/:slug/", "permanent": true },
+    { "source": "/blog/:slug/", "destination": "/ccat/blog/:slug/", "permanent": true }
+  ]
+}

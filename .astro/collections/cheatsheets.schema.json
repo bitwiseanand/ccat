@@ -1,0 +1,120 @@
+{
+  "$ref": "#/definitions/cheatsheets",
+  "definitions": {
+    "cheatsheets": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 60
+        },
+        "exam": {
+          "type": "string",
+          "enum": [
+            "ccat",
+            "gate-cse"
+          ]
+        },
+        "subject": {
+          "type": "string"
+        },
+        "topic": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 120,
+          "maxLength": 158
+        },
+        "keywords": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 5
+        },
+        "related": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 3
+        },
+        "difficulty": {
+          "type": "string",
+          "enum": [
+            "beginner",
+            "intermediate",
+            "advanced"
+          ]
+        },
+        "lastVerified": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "string",
+              "format": "date"
+            },
+            {
+              "type": "integer",
+              "format": "unix-time"
+            }
+          ]
+        },
+        "updatedDate": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "string",
+              "format": "date"
+            },
+            {
+              "type": "integer",
+              "format": "unix-time"
+            }
+          ]
+        },
+        "faq": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "question": {
+                "type": "string"
+              },
+              "answer": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "question",
+              "answer"
+            ],
+            "additionalProperties": false
+          },
+          "maxItems": 5
+        },
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "title",
+        "exam",
+        "subject",
+        "topic",
+        "description",
+        "lastVerified"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

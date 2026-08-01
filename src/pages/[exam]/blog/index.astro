@@ -1,0 +1,123 @@
+---
+import { getCollection } from 'astro:content';
+import ExamLayout from '../../../layouts/ExamLayout.astro';
+import { exams, getExamConfig } from '../../../data/exams';
+
+export async function getStaticPaths() {
+  return exams.map(e => ({ params: { exam: e.id } }));
+}
+
+const { exam } = Astro.params;
+const examConfig = getExamConfig(exam)!;
+
+const posts = await getCollection('blog', b => b.data.exam === exam);
+const sorted = posts.sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+---
+
+<ExamLayout
+  title={`${examConfig.name} Blog — Exam Tips & Strategy`}
+  description={`Articles, tips, and strategies for ${examConfig.name} preparation. Study plans, book recommendations, and exam insights.`}
+  exam={exam}
+  type="collection"
+  noIndex={posts.length === 0}
+  breadcrumbs={[
+    { label: examConfig.name, href: `/${exam}/` },
+    { label: 'Blog', href: `/${exam}/blog/` },
+  ]}
+>
+  <div class="blog-hub">
+    <header class="hub-header">
+      <h1>{examConfig.name} Blog</h1>
+      <p>Study strategies, exam tips, and preparation guides.</p>
+    </header>
+
+    <div class="blog-list">
+      {sorted.map(post => {
+        const slug = post.id.replace(/\.md$/, '').replace(`${exam}/`, '');
+        return (
+          <article class="blog-list-item">
+            <a href={`/${exam}/blog/${slug}/`} class="blog-link">
+              <div class="blog-meta-row">
+                <span class="blog-category">{post.data.category}</span>
+                <time datetime={post.data.date.toISOString()}>
+                  {post.data.date.toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' })}
+                </time>
+              </div>
+              <h2>{post.data.title}</h2>
+              <p>{post.data.description}</p>
+              {post.data.readTime && <span class="read-time">{post.data.readTime} read</span>}
+            </a>
+          </article>
+        );
+      })}
+    </div>
+
+    {sorted.length === 0 && (
+      <div class="empty-state">
+        <p>No articles available yet for {examConfig.name}.</p>
+      </div>
+    )}
+  </div>
+</ExamLayout>
+
+<style>
+  .blog-hub { max-width: 720px; margin: 0 auto; }
+  .hub-header { text-align: center; margin-bottom: 2.5rem; }
+  .hub-header h1 { margin: 0 0 0.5rem; font-size: 2rem; }
+  .hub-header p { color: #64748b; margin: 0; }
+  .blog-list { display: flex; flex-direction: column; gap: 1.5rem; }
+  .blog-list-item {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .blog-list-item:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  }
+  .blog-link {
+    display: block;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: inherit;
+  }
+  .blog-meta-row {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    font-size: 0.8rem;
+  }
+  .blog-category {
+    background: var(--exam-color);
+    color: white;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.65rem;
+    letter-spacing: 0.05em;
+  }
+  .blog-meta-row time { color: #94a3b8; }
+  .blog-list-item h2 {
+    margin: 0 0 0.5rem;
+    font-size: 1.2rem;
+    color: #0f172a;
+  }
+  .blog-list-item p {
+    margin: 0 0 0.75rem;
+    color: #64748b;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  .read-time {
+    font-size: 0.8rem;
+    color: #94a3b8;
+  }
+  .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #64748b;
+  }
+</style>
