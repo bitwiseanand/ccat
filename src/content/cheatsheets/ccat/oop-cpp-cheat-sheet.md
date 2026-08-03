@@ -431,3 +431,23 @@ delete[] arr;             // MUST use delete[] for arrays, not delete
   <p class="pyq-explain"><strong>Why:</strong> std::map is implemented as a self-balancing binary search tree (typically Red-Black), which keeps keys in sorted order automatically. unordered_map uses hashing and gives no ordering guarantee.</p>
 </div>
 
+## CDAC C-CAT — top OOP/C++ exam traps
+
+| Trap | Rule |
+|---|---|
+| Overloading vs Overriding | Overloading = same name, different parameters, compile-time. Overriding = same signature in derived class, runtime, needs `virtual`. |
+| Virtual destructor | Base class destructor MUST be virtual if you'll `delete` a derived object through a base pointer — otherwise derived cleanup is skipped. |
+| struct vs class default access | struct defaults to public, class defaults to private. That is the only functional difference. |
+| Private inheritance | ALL inherited members (even public ones) become private in the derived class — they're still there, just inaccessible from outside. |
+| Pure virtual function | `virtual void f() = 0;` makes the class abstract. You CAN have a pointer/reference to it, just not an instance. |
+| Constructor/destructor order | Base constructs first, derived constructs second. Destruction is the exact reverse. |
+| Static member | ONE copy shared by all objects — not per-object. |
+| `this` pointer | Implicitly passed to every non-static member function; NOT available in static member functions. |
+| Reference vs pointer | A reference must be initialized at declaration and can never be reseated to refer to something else. A pointer can be NULL and reassigned. |
+| Copy constructor trigger | Called on: pass-by-value, return-by-value, and explicit copy initialization — NOT on simple assignment of an already-constructed object (that's the assignment operator instead). |
+| Function overloading ambiguity | Overloading only by return type is NOT allowed — the parameter list must differ. |
+| Diamond problem | Fixed with `virtual` inheritance, so the shared base class has only one copy in the final derived object. |
+| Array delete | `new[]` must be paired with `delete[]`, never plain `delete` — mismatching them is undefined behavior. |
+| Template instantiation | Templates generate actual code only when instantiated with a specific type — this happens at compile time, not runtime. |
+
+*PYQs are indicative of exam style, not guaranteed exact repeats.*

@@ -213,4 +213,29 @@ DNS resolution flow:
   → Authoritative Name Server → IP address returned
 ```
 
+```pyq
+Q: What is the default port number for HTTPS?
+A) 80
+B) 21
+*C) 443
+D) 25
+Explain: Port 443 is the standard for HTTPS (encrypted web traffic). Port 80 is its unencrypted counterpart, HTTP.
+```
 
+## CDAC C-CAT — top networking exam traps
+
+| Trap | Rule |
+|---|---|
+| OSI vs TCP/IP | OSI = 7-layer theoretical model. TCP/IP = 4-layer model that's actually implemented on the internet. |
+| TCP vs UDP | TCP = reliable, connection-oriented, slower. UDP = unreliable, connectionless, faster. Streaming/gaming favor UDP. |
+| Switch vs Router | Switch works on MAC address (Layer 2). Router works on IP address (Layer 3). |
+| Circuit vs Packet switching | The modern internet uses packet switching, NOT circuit switching. |
+| Distance Vector vs Link State | RIP = Distance Vector (hop count). OSPF = Link State (full topology map). |
+| /24 usable hosts | 254, not 256 — 2 addresses are reserved (network + broadcast). |
+| 127.x.x.x | Reserved for loopback, NOT a usable Class A address. |
+| CRC vs Checksum vs Parity | CRC catches burst errors best. Parity only catches single-bit errors. |
+| Three-way handshake | SYN → SYN-ACK → ACK. Termination uses a separate 4-way FIN/ACK exchange. |
+| Port 80 vs 443 | 80 = HTTP (unencrypted). 443 = HTTPS (encrypted, uses TLS/SSL). |
+| DNS purpose | Translates domain names to IP addresses — it's a lookup service, not a routing protocol. |
+
+*PYQs are indicative of exam style, not guaranteed exact repeats.*

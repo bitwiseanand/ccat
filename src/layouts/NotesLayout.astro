@@ -1,27 +1,24 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
-import TableOfContents from '../components/TableOfContents.astro';
 
 interface Props {
   title: string;
   description: string;
   breadcrumbs?: { label: string; href: string }[];
   noIndex?: boolean;
-  headings?: { depth: number; slug: string; text: string }[];
 }
 
-const { title, description = '', breadcrumbs = [], noIndex = false, headings = [] } = Astro.props;
+const { title, description = '', breadcrumbs = [], noIndex = false } = Astro.props;
 ---
 
 <BaseLayout title={title} description={description} breadcrumbs={breadcrumbs} noIndex={noIndex}>
   {breadcrumbs.length > 0 && <Breadcrumbs items={breadcrumbs} />}
 
   <div class="notes-layout">
-    <aside class="toc-sidebar">
-      <TableOfContents headings={headings} />
+    <aside class="notes-sidebar">
+      <slot name="sidebar" />
     </aside>
-
     <article class="notes-article">
       <slot />
     </article>
@@ -32,15 +29,20 @@ const { title, description = '', breadcrumbs = [], noIndex = false, headings = [
   .notes-layout {
     display: grid;
     grid-template-columns: 260px 1fr;
-    gap: 2.5rem;
+    gap: 2rem;
     align-items: start;
   }
   @media (max-width: 900px) {
     .notes-layout { grid-template-columns: 1fr; }
+    .notes-sidebar { display: none; }
   }
-  .toc-sidebar {
-    position: relative;
+  .notes-sidebar {
+    position: sticky;
+    top: 1rem;
   }
+</style>
+
+<style>
   .notes-article {
     background: #fff;
     border: 1px solid var(--color-border);
@@ -126,6 +128,12 @@ const { title, description = '', breadcrumbs = [], noIndex = false, headings = [
     font-size: 0.875rem;
     color: var(--color-text-muted);
     margin: 0;
+  }
+  .notes-article :global(.card-time) {
+    display: inline-block;
+    margin-top: 0.65rem;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
   }
   .notes-article :global(.back-link) {
     display: inline-block;

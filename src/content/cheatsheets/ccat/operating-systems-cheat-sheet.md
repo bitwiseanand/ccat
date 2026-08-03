@@ -219,3 +219,29 @@ Fix: reduce the degree of multiprogramming
 | SCAN (Elevator) | Head moves in one direction, servicing requests, reverses at the end |
 | C-SCAN | Like SCAN, but jumps back to the start instead of reversing — uniform wait time |
 | LOOK / C-LOOK | Like SCAN/C-SCAN, but reverses at the last request, not the disk's physical end |
+
+```pyq
+Q: Which disk scheduling algorithm is also known as the "Elevator Algorithm"?
+A) FCFS
+B) SSTF
+*C) SCAN
+D) C-LOOK
+Explain: SCAN moves the disk head in one direction servicing requests, then reverses direction at the end — just like an elevator moving through floors, which is where the nickname comes from.
+```
+
+## CDAC C-CAT — top OS exam traps
+
+| Trap | Rule |
+|---|---|
+| Process vs Program | A program is passive code on disk; a process is an active instance of that program in execution. |
+| Belady's Anomaly | Only occurs with FIFO page replacement — more frames can mean MORE page faults, not fewer. |
+| Deadlock conditions | ALL 4 Coffman conditions are required simultaneously — breaking any one prevents deadlock. |
+| Mutex vs Semaphore | Mutex has ownership (only the locker can unlock). Semaphore is a general counter, any thread can signal it. |
+| SJF starvation | SJF and Priority Scheduling can starve long/low-priority jobs. FCFS and Round Robin cannot. |
+| Internal vs External fragmentation | Paging → internal fragmentation. Segmentation → external fragmentation. |
+| Banker's Algorithm | Deadlock AVOIDANCE, not prevention — it checks safety before granting each request. |
+| Context switch overhead | Too small a Round Robin quantum increases context-switch overhead, hurting overall throughput. |
+| Thrashing fix | Reduce the degree of multiprogramming — adding more processes makes thrashing worse, not better. |
+| TLB | Caches recent page-table lookups — a TLB hit avoids a full page-table memory access, which is the actual speed benefit. |
+
+*PYQs are indicative of exam style, not guaranteed exact repeats.*

@@ -1,0 +1,99 @@
+---
+interface SidebarItem {
+  title: string;
+  slug: string;
+  readTime: string;
+}
+
+interface Props {
+  subjectLabel: string;
+  subject: string;
+  items: SidebarItem[];
+  currentSlug: string;
+}
+
+const { subjectLabel, subject, items, currentSlug } = Astro.props;
+---
+
+<nav class="sidebar-nav" aria-label={`${subjectLabel} notes`}>
+  <a href={`/notes/${subject}/`} class="sidebar-title">{subjectLabel}</a>
+  <ul>
+    {items.map((item) => (
+      <li>
+        <a
+          href={`/notes/${subject}/${item.slug}/`}
+          class={item.slug === currentSlug ? 'active' : ''}
+          aria-current={item.slug === currentSlug ? 'page' : undefined}
+        >
+          <span class="item-title">{item.title}</span>
+          <span class="item-time">{item.readTime}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  .sidebar-nav {
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+    font-size: 0.9rem;
+  }
+  .sidebar-title {
+    display: block;
+    padding: 0.9rem 1rem;
+    font-weight: 700;
+    color: var(--color-text);
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-surface);
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  }
+  .sidebar-title:hover {
+    color: var(--color-primary-dark);
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0.4rem;
+  }
+  li + li {
+    margin-top: 1px;
+  }
+  a {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+    padding: 0.55rem 0.6rem;
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--color-text-secondary);
+    border-left: 2px solid transparent;
+    line-height: 1.35;
+  }
+  a:hover {
+    background: var(--color-surface);
+    color: var(--color-text);
+  }
+  a.active {
+    background: #eff6ff;
+    border-left-color: var(--color-primary);
+    color: var(--color-primary-dark);
+    font-weight: 600;
+  }
+  .item-title {
+    flex: 1;
+  }
+  .item-time {
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+  }
+  a.active .item-time {
+    color: var(--color-primary-dark);
+  }
+</style>

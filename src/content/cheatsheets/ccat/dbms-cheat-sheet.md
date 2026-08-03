@@ -190,3 +190,28 @@ INNER JOIN courses ON enrollments.course_id = courses.id
 WHERE courses.semester = 'Spring 2027';
 ```
 
+```pyq
+Q: A LEFT JOIN between Table A and Table B returns:
+A) Only rows that match in both tables
+*B) All rows from A, with matched rows from B (NULL where there's no match)
+C) All rows from B, with matched rows from A
+D) All rows from both tables, matched or not
+Explain: LEFT JOIN keeps every row from the left table regardless of a match, filling in NULLs for columns from the right table when no match exists. FULL OUTER JOIN is what returns unmatched rows from both sides.
+```
+
+## CDAC C-CAT — top DBMS exam traps
+
+| Trap | Rule |
+|---|---|
+| DCL vs DML | GRANT/REVOKE = DCL (permissions). INSERT/UPDATE/DELETE = DML (data). Frequently confused. |
+| Super Key vs Candidate Key | Every candidate key is a super key, but not every super key is minimal enough to be a candidate key. |
+| 2NF vs 3NF | 2NF removes partial dependency (on part of a composite key). 3NF removes transitive dependency (non-key → non-key). |
+| Atomicity vs Durability | Atomicity = all-or-nothing DURING execution. Durability = stays saved AFTER commit, survives crashes. |
+| Clustered index limit | Only 1 clustered index per table (determines physical row order); unlimited non-clustered indexes. |
+| 2PL shrinking phase | Once a transaction releases any lock, it cannot acquire new ones — this is what guarantees serializability. |
+| LEFT vs RIGHT vs FULL OUTER | LEFT keeps all of the left table, RIGHT keeps all of the right, FULL OUTER keeps both regardless of match. |
+| B+ Tree vs B-Tree | B+ Tree stores all actual data at leaf level with linked leaves — this is what most real databases actually use for indexing. |
+| Derived attribute | Computed from another attribute (e.g. Age from DOB) — not stored directly, a common ER-model trap. |
+| NULL in Primary Key | A primary key can NEVER be NULL — this is one of its two defining constraints, along with uniqueness. |
+
+*PYQs are indicative of exam style, not guaranteed exact repeats.*

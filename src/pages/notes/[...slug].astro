@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import NotesLayout from '../../layouts/NotesLayout.astro';
+import NotesSidebar from '../../components/NotesSidebar.astro';
 import { getExamConfig } from '../../data/exams';
 
 export async function getStaticPaths() {
@@ -18,21 +19,39 @@ export async function getStaticPaths() {
 
 const { entry, subject, isOverview } = Astro.props;
 
-let sections: any[] = [];
-if (isOverview) {
-  const allNotes = await getCollection('notes');
-  sections = allNotes
-    .filter((n) => {
-      const nid = n.id.replace(/\.mdx?$/, '');
-      return nid.startsWith(`${subject}/`) && !nid.endsWith('/overview');
-    })
-    .map((n) => ({
-      title: n.data.title,
-      description: n.data.description,
-      slug: n.id.replace(/\.mdx?$/, '').replace(`${subject}/`, ''),
-      order: n.data.order || 999,
-    }))
-    .sort((a, b) => a.order - b.order);
+const allNotes = await getCollection('notes');
+
+function readTimeFor(body: string): string {
+  const words = body.trim().split(/\s+/).filter(Boolean).length;
+  return `${Math.max(1, Math.round(words / 200))} min read`;
+}
+
+// Full, sorted list of real sections in this subject — used for both the
+// overview page's grid AND the persistent sidebar on every note page.
+const sections = allNotes
+  .filter((n) => {
+    const nid = n.id.replace(/\.mdx?$/, '');
+    return nid.startsWith(`${subject}/`) && !nid.endsWith('/overview');
+  })
+  .map((n) => ({
+    title: n.data.title,
+    description: n.data.description,
+    slug: n.id.replace(/\.mdx?$/, '').replace(`${subject}/`, ''),
+    order: n.data.order || 999,
+    readTime: readTimeFor(n.body || ''),
+  }))
+  .sort((a, b) => a.order - b.order);
+
+const currentSlug = isOverview ? '' : entry.id.replace(/\.mdx?$/, '').replace(`${subject}/`, '');
+
+// Sequential prev/next within the subject, batch-order aware via the same
+// `order` field the sidebar and overview grid already sort by.
+let prevNote: { title: string; slug: string } | null = null;
+let nextNote: { title: string; slug: string } | null = null;
+if (!isOverview) {
+  const idx = sections.findIndex((s) => s.slug === currentSlug);
+  if (idx > 0) prevNote = sections[idx - 1];
+  if (idx >= 0 && idx < sections.length - 1) nextNote = sections[idx + 1];
 }
 
 // Resolve the optional cross-link to a fast-revision cheat sheet, if this
@@ -67,7 +86,7 @@ const breadcrumbs = isOverview
       { label: entry.data.title, href: `/notes/${Astro.params.slug}` },
     ];
 
-const { Content, headings } = await entry.render();
+const { Content } = await entry.render();
 ---
 
 <NotesLayout
@@ -75,8 +94,18 @@ const { Content, headings } = await entry.render();
   description={entry.data.description}
   breadcrumbs={breadcrumbs}
   noIndex={isOverview && sections.length === 0}
-  headings={headings}
 >
+  {sections.length > 0 && (
+    <Fragment slot="sidebar">
+      <NotesSidebar
+        subjectLabel={subjectLabel}
+        subject={subject}
+        items={sections}
+        currentSlug={currentSlug}
+      />
+    </Fragment>
+  )}
+
   <div class="section-label">
     {isOverview ? 'Subject Overview' : 'Section'}
   </div>
@@ -105,6 +134,7 @@ const { Content, headings } = await entry.render();
           <a href={`/notes/${subject}/${section.slug}`} class="section-card">
             <h3>{section.title}</h3>
             <p>{section.description}</p>
+            <span class="card-time">{section.readTime}</span>
           </a>
         ))}
       </div>
@@ -112,7 +142,23 @@ const { Content, headings } = await entry.render();
   )}
 
   {!isOverview && (
-    <a href={`/notes/${subject}`} class="back-link">← Back to {subjectLabel}</a>
+    <>
+      <div class="note-pager">
+        {prevNote ? (
+          <a href={`/notes/${subject}/${prevNote.slug}/`} class="pager-link prev">
+            <span class="dir">← Previous</span>
+            <span class="pager-title">{prevNote.title}</span>
+          </a>
+        ) : <span />}
+        {nextNote ? (
+          <a href={`/notes/${subject}/${nextNote.slug}/`} class="pager-link next">
+            <span class="dir">Next →</span>
+            <span class="pager-title">{nextNote.title}</span>
+          </a>
+        ) : <span />}
+      </div>
+      <a href={`/notes/${subject}`} class="back-link">← Back to {subjectLabel}</a>
+    </>
   )}
 </NotesLayout>
 
@@ -134,5 +180,41 @@ const { Content, headings } = await entry.render();
   }
   .cross-link-callout strong {
     color: #1e40af;
+  }
+  .note-pager {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border);
+  }
+  .pager-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    max-width: 45%;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    color: var(--color-text);
+  }
+  .pager-link:hover {
+    border-color: var(--color-primary);
+  }
+  .pager-link.next {
+    text-align: right;
+    margin-left: auto;
+  }
+  .pager-link .dir {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-muted);
+  }
+  .pager-link .pager-title {
+    font-weight: 600;
+    font-size: 0.9rem;
   }
 </style>

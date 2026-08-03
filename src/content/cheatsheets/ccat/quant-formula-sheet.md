@@ -24,3 +24,7 @@ lastVerified: 2026-07-28
 - Average = Sum of values ÷ Number of values
 - If average changes when one value is replaced, difference = (new average − old average) × total count
 - Ratio a:b, if total is T → parts are (a/(a+b))×T and (b/(a+b))×T
+
+## Who this is for
+
+Candidates who've already covered these topics and want a fast pre-exam recall page, not a first-time explanation.
