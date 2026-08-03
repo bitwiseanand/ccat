@@ -3,6 +3,7 @@ title: Pointers in C
 subject: c-programming
 relatedCheatsheet: ccat/c-programming-cheat-sheet
 topic: c
+order: 5
 description: Pointers are the single most tested concept in  C programming and exams.
 keywords:
     - c programming

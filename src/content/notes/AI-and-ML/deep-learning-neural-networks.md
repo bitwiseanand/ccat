@@ -2,6 +2,7 @@
 title: "Deep Learning and Neural Networks"
 subject: "artificial-intelligence"
 topic: "deep-learning"
+order: 6
 description: "Mechanics of neural networks including training process, backpropagation, activation functions, and key hyperparameters."
 keywords: ["deep learning", "neural networks", "backpropagation", "activation functions", "gradient descent"]
 lastUpdated: "2026-07-29"

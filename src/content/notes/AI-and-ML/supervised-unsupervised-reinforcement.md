@@ -2,6 +2,7 @@
 title: "Supervised vs Unsupervised vs Reinforcement Learning"
 subject: "artificial-intelligence"
 topic: "machine-learning"
+order: 5
 description: "Full breakdown of the three main types of machine learning with examples, algorithms, and evaluation metrics."
 keywords: ["supervised learning", "unsupervised learning", "reinforcement learning", "classification", "clustering"]
 lastUpdated: "2026-07-29"

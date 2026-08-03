@@ -2,6 +2,7 @@
 title: "AI History Timeline"
 subject: "artificial-intelligence"
 topic: "history"
+order: 3
 description: "Key milestones and dates in the history of artificial intelligence, from 1943 to present."
 keywords: ["ai history", "artificial intelligence timeline", "turing test", "dartmouth conference", "deep learning revolution"]
 lastUpdated: "2026-07-29"

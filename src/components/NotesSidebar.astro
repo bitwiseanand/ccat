@@ -1,36 +1,45 @@
 ---
-interface SidebarItem {
+interface CourseItem {
   title: string;
   slug: string;
   readTime: string;
 }
 
-interface Props {
-  subjectLabel: string;
+interface CourseGroup {
   subject: string;
-  items: SidebarItem[];
+  subjectLabel: string;
+  items: CourseItem[];
+}
+
+interface Props {
+  groups: CourseGroup[];
+  currentSubject: string;
   currentSlug: string;
 }
 
-const { subjectLabel, subject, items, currentSlug } = Astro.props;
+const { groups, currentSubject, currentSlug } = Astro.props;
 ---
 
-<nav class="sidebar-nav" aria-label={`${subjectLabel} notes`}>
-  <a href={`/notes/${subject}/`} class="sidebar-title">{subjectLabel}</a>
-  <ul>
-    {items.map((item) => (
-      <li>
-        <a
-          href={`/notes/${subject}/${item.slug}/`}
-          class={item.slug === currentSlug ? 'active' : ''}
-          aria-current={item.slug === currentSlug ? 'page' : undefined}
-        >
-          <span class="item-title">{item.title}</span>
-          <span class="item-time">{item.readTime}</span>
-        </a>
-      </li>
-    ))}
-  </ul>
+<nav class="sidebar-nav" aria-label="Notes course outline">
+  {groups.map((group) => (
+    <div class={`subject-group ${group.subject === currentSubject ? 'current-group' : ''}`}>
+      <a href={`/notes/${group.subject}/`} class="sidebar-title">{group.subjectLabel}</a>
+      <ul>
+        {group.items.map((item) => (
+          <li>
+            <a
+              href={`/notes/${group.subject}/${item.slug}/`}
+              class={group.subject === currentSubject && item.slug === currentSlug ? 'active' : ''}
+              aria-current={group.subject === currentSubject && item.slug === currentSlug ? 'page' : undefined}
+            >
+              <span class="item-title">{item.title}</span>
+              <span class="item-time">{item.readTime}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  ))}
 </nav>
 
 <style>
@@ -42,23 +51,28 @@ const { subjectLabel, subject, items, currentSlug } = Astro.props;
     overflow-y: auto;
     font-size: 0.9rem;
   }
+  .subject-group + .subject-group {
+    border-top: 1px solid var(--color-border);
+  }
   .sidebar-title {
     display: block;
-    padding: 0.9rem 1rem;
+    padding: 0.75rem 1rem;
     font-weight: 700;
+    font-size: 0.85rem;
     color: var(--color-text);
     text-decoration: none;
-    border-bottom: 1px solid var(--color-border);
     background: var(--color-surface);
-    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  }
+  .current-group .sidebar-title {
+    color: var(--color-primary-dark);
   }
   .sidebar-title:hover {
-    color: var(--color-primary-dark);
+    text-decoration: underline;
   }
   ul {
     list-style: none;
     margin: 0;
-    padding: 0.4rem;
+    padding: 0.3rem;
   }
   li + li {
     margin-top: 1px;
@@ -68,12 +82,13 @@ const { subjectLabel, subject, items, currentSlug } = Astro.props;
     justify-content: space-between;
     align-items: baseline;
     gap: 0.5rem;
-    padding: 0.55rem 0.6rem;
+    padding: 0.5rem 0.6rem;
     border-radius: 6px;
     text-decoration: none;
     color: var(--color-text-secondary);
     border-left: 2px solid transparent;
     line-height: 1.35;
+    font-size: 0.85rem;
   }
   a:hover {
     background: var(--color-surface);
@@ -90,7 +105,7 @@ const { subjectLabel, subject, items, currentSlug } = Astro.props;
   }
   .item-time {
     flex-shrink: 0;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     color: var(--color-text-muted);
   }
   a.active .item-time {

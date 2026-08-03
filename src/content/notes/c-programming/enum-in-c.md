@@ -3,6 +3,7 @@ title: "Enums in C"
 subject: c-programming
 relatedCheatsheet: ccat/c-programming-cheat-sheet
 topic: c
+order: 7
 description: Instead of writing numeric values directly in the code, enums make programs easier to read and maintain.
 keywords:
     - c programming

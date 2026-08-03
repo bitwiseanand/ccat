@@ -3,6 +3,7 @@ title: Strings in C programming
 subject: c-programming
 relatedCheatsheet: ccat/c-programming-cheat-sheet
 topic: c
+order: 8
 description: Unlike languages such as Java, Python, or C++, C does not have a built-in String data type. Instead, a string is represented as an array of characters.
 keywords:
     - c programming

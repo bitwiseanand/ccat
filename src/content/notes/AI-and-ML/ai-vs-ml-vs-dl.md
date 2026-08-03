@@ -2,6 +2,7 @@
 title: "AI vs ML vs DL"
 subject: "artificial-intelligence"
 topic: "fundamentals"
+order: 4
 description: "Understanding the relationship and differences between Artificial Intelligence, Machine Learning, and Deep Learning."
 keywords: ["ai vs ml", "machine learning", "deep learning", "artificial intelligence hierarchy"]
 lastUpdated: "2026-07-29"

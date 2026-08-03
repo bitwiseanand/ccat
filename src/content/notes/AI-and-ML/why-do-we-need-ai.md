@@ -2,6 +2,7 @@
 title: "Why Do We Need AI?"
 subject: "artificial-intelligence"
 topic: "fundamentals"
+order: 2
 description: "Practical reasons why AI has become essential — from data processing and automation to solving complex scientific problems."
 keywords: ["why ai", "ai necessity", "automation", "data processing", "ai applications"]
 lastUpdated: "2026-07-29"

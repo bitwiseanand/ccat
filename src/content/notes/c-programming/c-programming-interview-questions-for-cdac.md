@@ -3,6 +3,7 @@ title: C Programming Interview questions
 subject: c-programming
 relatedCheatsheet: ccat/c-programming-cheat-sheet
 topic: c
+order: 10
 description: Beyond the C-CAT MCQ paper itself, several CDAC centres run a short technical interview or viva during counselling and course orientation.
 keywords:
     - c programming

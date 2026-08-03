@@ -3,6 +3,7 @@ title: "File Handling in C Programming"
 subject: c-programming
 relatedCheatsheet: ccat/c-programming-cheat-sheet
 topic: c
+order: 9
 description: File handling lets a C program read from and write to files stored on disk, so data survives after the program ends.
 keywords:
     - c programming

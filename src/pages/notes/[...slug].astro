@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import NotesLayout from '../../layouts/NotesLayout.astro';
 import NotesSidebar from '../../components/NotesSidebar.astro';
 import { getExamConfig } from '../../data/exams';
+import { notesCourseOrder } from '../../data/notesCourseOrder';
 
 export async function getStaticPaths() {
   const notes = await getCollection('notes');
@@ -26,32 +27,66 @@ function readTimeFor(body: string): string {
   return `${Math.max(1, Math.round(words / 200))} min read`;
 }
 
-// Full, sorted list of real sections in this subject — used for both the
-// overview page's grid AND the persistent sidebar on every note page.
-const sections = allNotes
-  .filter((n) => {
+function labelFor(subjectSlug: string): string {
+  return subjectSlug.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase());
+}
+
+// Every real subject (has at least one non-overview note), in course order.
+// Subjects not yet in notesCourseOrder fall back to the end, alphabetically,
+// so a newly-added subject doesn't just silently vanish from the course.
+const subjectsWithContent = Array.from(new Set(allNotes.map((n) => n.id.split('/')[0])))
+  .filter((s) => allNotes.some((n) => {
     const nid = n.id.replace(/\.mdx?$/, '');
-    return nid.startsWith(`${subject}/`) && !nid.endsWith('/overview');
-  })
-  .map((n) => ({
-    title: n.data.title,
-    description: n.data.description,
-    slug: n.id.replace(/\.mdx?$/, '').replace(`${subject}/`, ''),
-    order: n.data.order || 999,
-    readTime: readTimeFor(n.body || ''),
+    return nid.startsWith(`${s}/`) && !nid.endsWith('/overview');
   }))
-  .sort((a, b) => a.order - b.order);
+  .sort((a, b) => {
+    const ai = notesCourseOrder.indexOf(a);
+    const bi = notesCourseOrder.indexOf(b);
+    if (ai === -1 && bi === -1) return a.localeCompare(b);
+    if (ai === -1) return 1;
+    if (bi === -1) return -1;
+    return ai - bi;
+  });
+
+// Full course outline, grouped by subject, each subject's notes sorted by
+// its own `order` field — this is what both the sidebar and cross-subject
+// Prev/Next are derived from.
+const courseGroups = subjectsWithContent.map((s) => ({
+  subject: s,
+  subjectLabel: labelFor(s),
+  items: allNotes
+    .filter((n) => {
+      const nid = n.id.replace(/\.mdx?$/, '');
+      return nid.startsWith(`${s}/`) && !nid.endsWith('/overview');
+    })
+    .map((n) => ({
+      title: n.data.title,
+      description: n.data.description,
+      slug: n.id.replace(/\.mdx?$/, '').replace(`${s}/`, ''),
+      order: n.data.order || 999,
+      readTime: readTimeFor(n.body || ''),
+    }))
+    .sort((a, b) => a.order - b.order),
+}));
+
+// Flattened, in course order — last item of one subject is immediately
+// followed by the first item of the next, which is what makes Prev/Next
+// flow across subject boundaries instead of stopping at each one's edge.
+const flatCourse = courseGroups.flatMap((g) =>
+  g.items.map((item) => ({ ...item, subject: g.subject }))
+);
+
+// This subject's own notes (still needed for the overview page's grid).
+const sections = courseGroups.find((g) => g.subject === subject)?.items ?? [];
 
 const currentSlug = isOverview ? '' : entry.id.replace(/\.mdx?$/, '').replace(`${subject}/`, '');
 
-// Sequential prev/next within the subject, batch-order aware via the same
-// `order` field the sidebar and overview grid already sort by.
-let prevNote: { title: string; slug: string } | null = null;
-let nextNote: { title: string; slug: string } | null = null;
+let prevNote: { title: string; slug: string; subject: string } | null = null;
+let nextNote: { title: string; slug: string; subject: string } | null = null;
 if (!isOverview) {
-  const idx = sections.findIndex((s) => s.slug === currentSlug);
-  if (idx > 0) prevNote = sections[idx - 1];
-  if (idx >= 0 && idx < sections.length - 1) nextNote = sections[idx + 1];
+  const idx = flatCourse.findIndex((s) => s.subject === subject && s.slug === currentSlug);
+  if (idx > 0) prevNote = flatCourse[idx - 1];
+  if (idx >= 0 && idx < flatCourse.length - 1) nextNote = flatCourse[idx + 1];
 }
 
 // Resolve the optional cross-link to a fast-revision cheat sheet, if this
@@ -95,12 +130,11 @@ const { Content } = await entry.render();
   breadcrumbs={breadcrumbs}
   noIndex={isOverview && sections.length === 0}
 >
-  {sections.length > 0 && (
+  {courseGroups.length > 0 && (
     <Fragment slot="sidebar">
       <NotesSidebar
-        subjectLabel={subjectLabel}
-        subject={subject}
-        items={sections}
+        groups={courseGroups}
+        currentSubject={subject}
         currentSlug={currentSlug}
       />
     </Fragment>
@@ -145,14 +179,18 @@ const { Content } = await entry.render();
     <>
       <div class="note-pager">
         {prevNote ? (
-          <a href={`/notes/${subject}/${prevNote.slug}/`} class="pager-link prev">
-            <span class="dir">← Previous</span>
+          <a href={`/notes/${prevNote.subject}/${prevNote.slug}/`} class="pager-link prev">
+            <span class="dir">
+              ← Previous{prevNote.subject !== subject ? ` · ${labelFor(prevNote.subject)}` : ''}
+            </span>
             <span class="pager-title">{prevNote.title}</span>
           </a>
         ) : <span />}
         {nextNote ? (
-          <a href={`/notes/${subject}/${nextNote.slug}/`} class="pager-link next">
-            <span class="dir">Next →</span>
+          <a href={`/notes/${nextNote.subject}/${nextNote.slug}/`} class="pager-link next">
+            <span class="dir">
+              Next{nextNote.subject !== subject ? ` · ${labelFor(nextNote.subject)}` : ''} →
+            </span>
             <span class="pager-title">{nextNote.title}</span>
           </a>
         ) : <span />}

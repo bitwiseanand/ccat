@@ -3,6 +3,7 @@ title: Operators precedence in C
 subject: c-programming
 relatedCheatsheet: ccat/c-programming-cheat-sheet
 topic: c
+order: 2
 description: Understanding Operator Precedence and Associativity is essential for the CDAC C-CAT exam.
 keywords:
     - c programming

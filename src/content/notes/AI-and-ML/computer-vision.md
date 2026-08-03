@@ -2,6 +2,7 @@
 title: "Computer Vision"
 subject: "artificial-intelligence"
 topic: "computer-vision"
+order: 9
 description: "Overview of computer vision pipeline, tasks including classification, detection, and segmentation, and real-world applications."
 keywords: ["computer vision", "image classification", "object detection", "semantic segmentation", "cnn"]
 lastUpdated: "2026-07-29"

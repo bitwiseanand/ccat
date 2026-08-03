@@ -2,6 +2,7 @@
 title: "What Is Artificial Intelligence?"
 subject: "artificial-intelligence"
 topic: "fundamentals"
+order: 1
 description: "A clear explanation of what artificial intelligence actually means, the Turing Test, and everyday AI examples."
 keywords: ["artificial intelligence", "what is ai", "turing test", "machine intelligence", "ai definition"]
 lastUpdated: "2026-07-29"

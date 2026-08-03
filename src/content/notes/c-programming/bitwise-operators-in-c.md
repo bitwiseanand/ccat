@@ -3,6 +3,7 @@ title: Bitwise Operators in C
 subject: c-programming
 relatedCheatsheet: ccat/c-programming-cheat-sheet
 topic: c
+order: 3
 description: "Bitwise operators work directly on the binary representation of integers, bit by bit, rather than on their decimal values. "
 keywords:
     - c programming

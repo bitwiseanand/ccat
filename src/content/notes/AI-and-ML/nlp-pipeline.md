@@ -2,6 +2,7 @@
 title: "NLP Pipeline Explained"
 subject: "artificial-intelligence"
 topic: "nlp"
+order: 8
 description: "The 5-step NLP pipeline, key techniques like tokenization and lemmatization, and transformer architecture overview."
 keywords: ["nlp pipeline", "natural language processing", "tokenization", "lemmatization", "transformer", "bert", "gpt"]
 lastUpdated: "2026-07-29"

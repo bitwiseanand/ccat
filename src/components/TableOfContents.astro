@@ -17,7 +17,7 @@ const toc = headings.filter(h => h.depth >= 2 && h.depth <= 3);
 if (toc.length < 3) return;
 ---
 
-<nav class="toc" aria-label="Table of contents">
+<nav class="toc toc-desktop" aria-label="Table of contents">
   <h2>On this page</h2>
   <ul>
     {toc.map(heading => (
@@ -27,6 +27,50 @@ if (toc.length < 3) return;
     ))}
   </ul>
 </nav>
+
+<details class="toc toc-mobile-details">
+  <summary>On this page</summary>
+  <ul>
+    {toc.map(heading => (
+      <li class={`depth-${heading.depth}`}>
+        <a href={`#${heading.slug}`}>{heading.text}</a>
+      </li>
+    ))}
+  </ul>
+</details>
+
+<style>
+  .toc-mobile-details {
+    display: none;
+  }
+  @media (max-width: 900px) {
+    .toc-desktop { display: none; }
+    .toc-mobile-details { display: block; }
+  }
+  .toc-mobile-details summary {
+    cursor: pointer;
+    list-style: none;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    font-weight: 600;
+  }
+  .toc-mobile-details summary::-webkit-details-marker {
+    display: none;
+  }
+  .toc-mobile-details summary::after {
+    content: "▾";
+    float: right;
+    font-size: 1rem;
+  }
+  .toc-mobile-details[open] summary::after {
+    content: "▴";
+  }
+  .toc-mobile-details ul {
+    margin-top: 0.75rem;
+  }
+</style>
 
 <style>
   .toc {
@@ -39,6 +83,9 @@ if (toc.length < 3) return;
     font-size: 0.875rem;
     max-height: calc(100vh - 4rem);
     overflow-y: auto;
+  }
+  @media (max-width: 900px) {
+    .toc { position: static; max-height: none; }
   }
   .toc h2 {
     margin: 0 0 0.75rem 0;

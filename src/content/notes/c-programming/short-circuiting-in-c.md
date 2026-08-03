@@ -3,6 +3,7 @@ title: Short Circuiting in C
 subject: c-programming
 relatedCheatsheet: ccat/c-programming-cheat-sheet
 topic: c
+order: 4
 description: Short circiting in C is important but rather underlooked concept.
 keywords:
     - c programming

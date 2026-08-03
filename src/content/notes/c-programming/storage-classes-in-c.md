@@ -3,6 +3,7 @@ title: C Programming Storage Classes
 subject: c-programming
 relatedCheatsheet: ccat/c-programming-cheat-sheet
 topic: c
+order: 1
 description: Take a deep dive into the four storage classes and its purposes in C
 keywords:
     - c programming

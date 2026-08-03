@@ -2,6 +2,7 @@
 title: "CNN vs RNN"
 subject: "artificial-intelligence"
 topic: "deep-learning"
+order: 7
 description: "Comparison of Convolutional Neural Networks and Recurrent Neural Networks, their architectures, use cases, and differences."
 keywords: ["cnn", "rnn", "convolutional neural network", "recurrent neural network", "lstm"]
 lastUpdated: "2026-07-29"

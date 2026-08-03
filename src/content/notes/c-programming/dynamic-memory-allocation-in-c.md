@@ -3,6 +3,7 @@ title: Dynamic Memory Allocation in C
 subject: c-programming
 relatedCheatsheet: ccat/c-programming-cheat-sheet
 topic: c
+order: 6
 description: Dynamic memory allocation lets a program request memory at runtime instead — from a region called the heap.
 keywords:
     - c programming

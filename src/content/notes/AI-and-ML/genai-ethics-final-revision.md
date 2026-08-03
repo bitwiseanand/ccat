@@ -2,6 +2,7 @@
 title: "Generative AI, Ethics & Final Revision"
 subject: "artificial-intelligence"
 topic: "generative-ai"
+order: 10
 description: "Overview of Generative AI technologies, risks, AI ethics concerns, and a consolidated revision checklist."
 keywords: ["generative ai", "ai ethics", "gan", "llm", "deepfakes", "hallucination"]
 lastUpdated: "2026-07-29"
