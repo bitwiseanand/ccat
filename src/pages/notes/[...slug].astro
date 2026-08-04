@@ -152,13 +152,13 @@ const { Content } = await entry.render();
   )}
   <div style="margin-bottom: 1.25rem;"></div>
 
-  <Content />
-
   {relatedCheatsheet && (
     <a href={relatedCheatsheet.href} class="cross-link-callout">
       ⚡ Need a fast revision version? See the <strong>{relatedCheatsheet.title}</strong> →
     </a>
   )}
+
+  <Content />
 
   {isOverview && sections.length > 0 && (
     <>

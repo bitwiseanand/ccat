@@ -52,17 +52,17 @@ const { title, description, exam, subject, date, updatedDate, keywords, breadcru
         </div>
       </header>
 
-      <div class="content-body">
-        <slot />
-      </div>
-
-      {faq && <FAQ faq={faq} />}
-
       {notesLink && (
         <a href={notesLink.href} class="cross-link-callout">
           📖 Want more detail on specific topics? Browse all <strong>{notesLink.label}</strong> notes →
         </a>
       )}
+
+      <div class="content-body">
+        <slot />
+      </div>
+
+      {faq && <FAQ faq={faq} />}
 
       <RelatedContent items={relatedItems} />
     </article>
@@ -74,7 +74,6 @@ const { title, description, exam, subject, date, updatedDate, keywords, breadcru
     display: grid;
     grid-template-columns: 260px 1fr;
     gap: 2.5rem;
-    align-items: start;
   }
   @media (max-width: 900px) {
     .cheatsheet-layout { grid-template-columns: 1fr; }
